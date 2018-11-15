@@ -21,7 +21,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## 1.1 Ciência de Dados
 
-Descrever...
+Data Science ou Ciência de Dados permite a extração de informações extremamente valiosas a partir de dados contidos em qualquer corporação ou empresa. Na era do Big Data, a ciência de dados está se tornando um campo promissor para processar grandes volumes gerados por diversas fontes e em diferentes velocidades. [5]
+
+Em resumo é uma ciência que visa estudar as informações, seu processo de captura, transformação, geração e, posteriormente, análise de dados. [5]
+
+A ciência de dados difere das análises estatísticas e da ciência da computação em seu método que é aplicado a dados coletados usando princípios científicos. A ciência de dados está procurando descobrir conhecimento a partir de uma quantidade grande e pesada de dados que podem ser usadas para tomar decisões e fazer previsões, e não simplesmente a interpretação de números. [5]
+
+Para organizar, categorizar, estruturar e, depois, analisar essa quantidade exorbitante de dados, o data scientist é o profissional mais indicado. Este especialista também deve ser capaz de realizar tarefas, como extrair dados de bancos de dados MySQL e transformá-los em informações úteis e decifráveis por executivos de negócios por meio de gráficos e dashboards. [5]
+
+No livro R for Data Science, os autores definem o fluxograma do processo de Data Science com seis etapas que englobam desde a coleta dos dados até a comunicação dos resultados com os públicos interessados, de maneira automatizada e rápida. As etapas são: importação, organização, transformação, visualização, modelagem e comunicação. Portanto, data science é a maneira de gerar conhecimento, de fazer ciência a partir dos dados. [5]
+
 
 ## 1.2 Cursos de Pós Graduação
 
@@ -71,15 +80,22 @@ As áreas de concentração de pesquisa em que o Programa se fundamenta são _De
 
 # 2. CRISP-DM
 
-Descrever...
+O desenvolvimento e apresentação de resultados, como sugerido no plano de ensino, deve seguir a metodologia CRISP-DM (__Cross Industry Standard Process for Data Mining__), que é um dos melhores e mais conhecidos modelos de análise e exploração de dados. Proposto em 1996, o modelo trata-se de um processo de data mining ou mineração de dados desvendo fases e o correto caminho a ser seguido quando estamos lidando com análise de dados e seus problemas relacionados. [6]
+
+O processo é composto por 6 (seis) grandes etapas principais: Business Understanding; Data Understanding; Data Preparation; Modeling; Evaluation; Deployment. É importante destacar que o processo e ela é interativa e incremental e não necessariamente linear de uma fase para a outra, o que pode ser visto na figura a seguir. [6]
+
 
 ## 2.1 Compreensão de Negócios
 
-Descrever...
+A primeira e uma das etapas mais importantes do processo consiste em realizar e extrair informações relevantes sobre qual o contexto a ser trabalhado, qual a área de conhecimento, quais os objetivos e requisitos do projeto para poder, assim, traçar um plano claro sobre as ações que devem ser tomadas. [6]
+
+*Descrever o nosso...*
 
 ## 2.2 Compreensão dos dados
 
-Descrever...
+Com a primeira fase já previamente estabelecida, uma outra etapa tão importante quanto é a fase de inspecionar, organizar e descrever os dados disponíveis para a resolução do problema. É uma etapa importante também para a familiarização com os dados de insumo para a realização das análises, possibilitando também que alguns insights sejam previamente levados em consideração para etapas futuras. [6]
+
+O estudo de todas as tabelas disponíveis e realizar a medição da possibilidade de criação de uma visão única para a análise também é parte dessa fase. [6]
 
 ### 2.2.1 Importando as bibliotecas
 
@@ -89,9 +105,11 @@ Descrever...
 library(jsonlite)
 library(plyr)
 library(dplyr)
+library(RColorBrewer)
 library(stringr)
 library(ggplot2)
 library(tidyr)
+library(scales)
 ```
 
 ## 2.2.2 Importando arquivos de publicações no formato JSON
@@ -112,7 +130,7 @@ head(publicacoes_design)
 
 ## 2.3 Preparação dos Dados
 
-Descrever...
+Abrange todas as atividades para construir o conjunto final de dados, realizando o tratamento, seleção, limpeza e estruturação dos dados disponíveis. O output desta preparação de dados são os dados finais que serão utilizados para o desenvolvimento do modelo. [6]
 
 ## 2.3.1 Transformando em _Dataframes_
 
@@ -138,11 +156,7 @@ head(df_pub_arquitetura)
 head(df_pub_design)
 ```
 
-## 2.4 Preparação dos Dados
-
-Descrever...
-
-### 2.4.1 Separação de Publicações por autor
+### 2.3.3 Separação de Publicações por autor
 
 Descrever...
 
@@ -154,7 +168,7 @@ pub_arquitetura_autores.endo <- df_pub_arquitetura %>% unnest(autores.endogeno) 
 pub_design_autores.endo <- df_pub_design %>% unnest(autores.endogeno) %>% distinct()
 ```
 
-### 2.4.2 Separação de Periódicos por Autor
+### 2.3.4 Separação de Periódicos por Autor
 
 Descrever...
 
@@ -166,19 +180,25 @@ pub_arquitetura_periodicos <- pub_arquitetura_autores.endo %>% filter(is.element
 pub_design_periodicos <- pub_design_autores.endo %>% filter(is.element(pub_design_autores.endo$periodico, pub_design_autores.endo$ano))
 ```
 
-## 2.5 Modelagem
+## 2.4 Modelagem
 
-Descrever...
+Essa fase é uma etapa mais voltada para Pesquisa e Desenvolvimento, onde são selecionadas diferentes técnicas de modelagem, para realizar diferentes parâmetros, calibragens e etc. Em um problema de mineração de dados, muitas vezes é possível realizar a análise dos dados utilizando diferentes abordagens, considerando também o tipo e estrutura de dado que essa etapa recebe de input da fase de preparação de dados. [6]
 
-## 2.6 Avaliação do Modelo
+A comunicação com a fase de preparação de dados nessa fase é muito importante, para a experimentação e modelagem utilizando diferentes técnicas e abordagens. [6]
 
-Descrever...
+*Fazer...*
 
-## 2.7 Desenvolvimento
+## 2.5 Avaliação do Modelo
 
-Descrever...
+Com o modelo em mãos é possível realizar a avaliação dos seus resultados de maneira detalhada e revisar as etapas executadas para que os mesmo estejam dentro dos previstos e cumpram os requisitos identificados na fase de entendimento do negócio. [6]
 
-### 2.7.1 Publicações por Ano
+*Fazer...*
+
+## 2.6 Desenvolvimento
+
+Com todas as etapas tendo sido percorridas, mesmo não sendo o fim do processo - como citado inicialmente, o processo é iterativo e incremental -, é preciso demonstrar os resultados e para que o modelo preparado seja utilizado. No caso da disciplina, a parte de implantação consiste basicamente em elaborar um relatório final para demonstrar os dados e as mais diversas informações que eles fornecem sobre os projetos de Pós-Graduação de Arquitetura e Urbanismo. Em diferentes contextos, poderia ser utilizado o modelo para entregar informações em tempo real para o usuário final, por exemplo. [6]
+
+### 2.6.1 Publicações por Ano
 
 Descrever...
 
@@ -202,9 +222,86 @@ geom_histogram(stat ="count" ,fill = "#11BAA4")
 
 ![Departamento de Arquitetura - Publicações anuais](publicacoes-design.png)
 
+Explicar...
+
+### 2.6.2 Publicações por País
+
+Descrever...
+
+```{r eval=FALSE}
+# Arquitetura
+pub_arquitetura_group <- select(pub_arquitetura_periodicos, c("periodico", "pais_de_publicacao"))
+arquitetura_qtde_pub_pais <- pub_arquitetura_group %>% add_count(pais_de_publicacao)
+arquitetura_qtde_pub_pais_distinct <- arquitetura_qtde_pub_pais %>% distinct(pais_de_publicacao, n)
+```
+
+Explicar...
+
+```{r eval=FALSE}
+cols <- colorRampPalette(brewer.pal(12, "Set2"))
+myPal <- cols(length(unique(arquitetura_qtde_pub_pais_distinct$pais_de_publicacao)))
+
+ggplot(arquitetura_qtde_pub_pais_distinct, aes(x= "", y= n, fill = arquitetura_qtde_pub_pais_distinct$pais_de_publicacao)) +
+ggtitle("Qtde de Publicações por País - Pós Graduação Arquitetura") +
+geom_bar(width = 1, stat ="identity") +
+coord_polar("y") +
+labs(fill='Paises') +
+theme (
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(),
+  panel.border = element_blank(),
+  panel.grid=element_blank(),
+  axis.ticks = element_blank()
+) +
+# geom_text(aes(y = n/2 + c(0, cumsum(n)[-length(n)]), label = percent(n/100)), data = arquitetura_qtde_pub_pais_distinct, size=2) +
+scale_fill_manual(values = myPal, na.value = "#FF8D59")
+
+head(arquitetura_qtde_pub_pais_distinct, n = 14L)
+
+```
+![Departamento de Arquitetura - Proporção de Publicações por País](publicacoes-pais-arquitetura-grafico.png)
+![Departamento de Arquitetura - Número de Publicações por País](publicacoes-pais-arquitetura-tabela.png)
+
+Interpretar Gráfico...
+
+```{r eval=FALSE}
+# Arquitetura
+pub_design_group <- select(pub_design_periodicos, c("periodico", "pais_de_publicacao"))
+design_qtde_pub_pais <- pub_design_group %>% add_count(pais_de_publicacao)
+design_qtde_pub_pais_distinct <- design_qtde_pub_pais %>% distinct(pais_de_publicacao, n)
+```
+
+Explicar...
+
+```{r eval=FALSE}
+ggplot(design_qtde_pub_pais_distinct, aes(x= "", y= n, fill = design_qtde_pub_pais_distinct$pais_de_publicacao)) +
+ggtitle("Qtde de Publicações por País - Pós Graduação Design") +
+geom_bar(width = 1, stat ="identity") +
+coord_polar("y") +
+labs(fill='Paises') +
+theme (
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(),
+  panel.border = element_blank(),
+  panel.grid=element_blank(),
+  axis.ticks = element_blank()
+) +
+scale_fill_manual(values = myPal, na.value = "#FFa1e2")
+
+head(design_qtde_pub_pais_distinct, n = 6L)
+
+```
+
+![Departamento de Design - Proporção de Publicações por País](publicacoes-pais-design-grafico.png)
+![Departamento de Design - Número de Publicações por País](publicacoes-pais-design-tabela.png)
+
+Interpretar Gráfico...
+
 # Referências
 
 1. [Histórico da PGG - FAU](http://www.ppgfau.unb.br/institucional/historico-da-ppg-fau).
 2. [Áreas de Concentração - FAU](http://www.ppgfau.unb.br/institucional/historico-da-ppg-fau).
 3. [COLETA DE DADOS Conceitos e orientações - Manual de preenchimento da Plataforma Sucupira](https://www.capes.gov.br/images/stories/download/avaliacao/avaliacao-n/ColetaDados-PlataformaSucupira-Manual-Abr14.pdf).
 4. [PGG - Departamento de Design](http://design.unb.br/index.php?option=com_content&view=article&id=56&Itemid=167&lang=pt-br).
+5. [Introdução à Ciência de Dados 2.0 - Data Science Academy](https://www.datascienceacademy.com.br/course?courseid=introduo--cincia-de-dados).
+6. [Afinal, o que é Data Science? - ABG Consultoria Estatística](http://www.abgconsultoria.com.br/blog/afinal-o-que-e-data-science/).
