@@ -5,7 +5,7 @@ author:
 - Cecilia França Dib de Oliveira Bessa - 14/0134425
 - Thiago Canabrava Moreira - 14/0163859
 - Vitor Bertulucci Borges - 14/0171126
-date: "17 de Novembro de 2018"
+# date: "17 de Novembro de 2018"
 indent: true
 output:
   html_document:
@@ -21,7 +21,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## 1.1 Ciência de Dados
 
+Descrever...
+
 ## 1.2 Cursos de Pós Graduação
+
+Segundo a Capes, Programa de Pós-Graduação é o conjunto formado pelos cursos de mestrado e/ou doutorado acadêmicos ou de mestrado profissional de uma Instituição de Ensino Superior - IES atuante numa mesma área do conhecimento - sua área básica - que compartilha essencialmente o mesmo corpo docente e tem uma estrutura administrativa comum. Programas são divididos em acadêmicos ou profissionais, de acordo com a natureza do(s) curso(s).
+
+A aplicação Coleta de Dados é um sistema informatizado da Capes, desenvolvido com o objetivo de coletar informações dos programas de pós-graduação stricto sensu do país. Com o lançamento da Plataforma Sucupira, o Coleta de Dados foi reformulado e passa a ser um dos módulos que a constituem.
+
+A Plataforma Sucupira é uma importante ferramenta para coletar informações, realizar análises e avaliações e ser a base de referência do Sistema Nacional de Pós-Graduação - SNPG. A Plataforma deve disponibilizar em tempo real e com muito mais transparência as informações, processos e procedimentos que a Capes realiza no SNPG para toda a comunidade acadêmica. [3]
 
 ### 1.2.1 Arquitetura e Urbanismo
 
@@ -49,7 +57,17 @@ A área de Projeto e Planejamento abarca estudos sobre políticas, planos e gest
 
 ## 1.2.2 Design
 
-Descrever...
+No segundo semestre de 2013 foi criado o curso de mestrado acadêmico em Design. O Programa de Pós Graduação em Design da Universidade de Brasília - PPG Design UnB - faz parte do Instituto de Artes e do Departamento de Design da UnB.
+
+Os objetivos do Programa são:
+
+- Possibilitar a formação de docentes na área de design com vistas a ampliação e melhor qualificação dos docentes na região Centro-Oeste e Norte do país.
+- Desenvolver pesquisadores em design, possibilitando o desenvolvimento tecnológico, cultural e econômico do país.
+- Aproximar o design da sociedade por meio de pesquisas relacionadas aos processos de produção e inovação com base tecnológica.
+
+O grupo do PPG Design UnB busca construir um programa de qualidade, integrado com as necessidades da pesquisa em design, ao mesmo tempo, ativo na produção do conhecimento e na busca por projetos cooperativos. Através de suas ações, contribui para ampliar as pesquisas em Design desenvolvidas na região, aumentando a produção bibliográfica e a geração de conhecimento e inovação. A diversidade da temática das pesquisas pode ser observada também no projetos de pesquisas dos discentes, sendo que muitos são oriundos de outros estados. Isto demonstra a vocação do PPG Design UnB em agregar pluralidade cultural e interdisciplinar que pode ser vista nos projetos de pesquisas desenvolvidos no programa. [4]
+
+As áreas de concentração de pesquisa em que o Programa se fundamenta são _Design, Tecnologia e Sociedade_.
 
 # 2. CRISP-DM
 
@@ -172,7 +190,7 @@ labs(y = "Total de Publicações", x = "Ano") +
 geom_histogram(stat ="count" ,fill = "#1123A4")
 ```
 
-![Quantidade de Publicações por Ano no Departamento de Física](publicacoes-arquitetura.png)
+![Departamento de Arquitetura - Publicações anuais](publicacoes-arquitetura.png)
 
 ```{r eval=FALSE}
 # Design
@@ -182,9 +200,11 @@ labs(y = "Total de Publicações", x = "Ano") +
 geom_histogram(stat ="count" ,fill = "#11BAA4")
 ```
 
-![Quantidade de Publicações por Ano no Departamento de Física](publicacoes-design.png)
+![Departamento de Arquitetura - Publicações anuais](publicacoes-design.png)
 
 # Referências
 
 1. [Histórico da PGG - FAU](http://www.ppgfau.unb.br/institucional/historico-da-ppg-fau).
 2. [Áreas de Concentração - FAU](http://www.ppgfau.unb.br/institucional/historico-da-ppg-fau).
+3. [COLETA DE DADOS Conceitos e orientações - Manual de preenchimento da Plataforma Sucupira](https://www.capes.gov.br/images/stories/download/avaliacao/avaliacao-n/ColetaDados-PlataformaSucupira-Manual-Abr14.pdf).
+4. [PGG - Departamento de Design](http://design.unb.br/index.php?option=com_content&view=article&id=56&Itemid=167&lang=pt-br).
