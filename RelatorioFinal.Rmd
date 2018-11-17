@@ -110,14 +110,13 @@ Visto isso, foram realizados os passos abaixo para realizar análises relevantes
 Primeiramente foi importado as bibliotecas para possibilitar a leitura e manipulação dos dados.
 
 ```{r eval=FALSE} 
-library(jsonlite)
-library(plyr)
-library(dplyr)
-library(RColorBrewer)
-library(stringr)
-library(ggplot2)
-library(tidyr)
-library(scales)
+library(jsonlite) # Biblioteca para lidar com arquivos do formato JSON
+library(plyr) # Splitting e combinação de dados
+library(dplyr) # Manipulação de dados
+library(RColorBrewer) # Editar paleta de cores dos gráficos
+library(stringr) # Facilita a manipulação de strings
+library(ggplot2) # Criação e plot de gráficos
+library(tidyr) # Manipulação de Dataframes
 ```
 
 ## 2.2.2 Importando arquivos de publicações no formato JSON
@@ -152,13 +151,26 @@ Com isso, foi possível observar a presença das seguintes colunas no _json_ de 
 - *autores*: Lista dos criadores da publicação;
 - *autores-endogeno*: Autores endógenos da publicação.
 
+## 2.2.3 Contagem de registros nulos
+
+Na fase de compreensão, também verificamos a qualidade dos dados disponíveis. Ao observar os arquivos importados e suas colunas, nota-se que algumas colunas existem muitos valores nulos em seus registros.
+
+```{r eval=FALSE}
+# library(installr)
+# sum(is.empty(publicacoes_arquitetura$doi))
+```
+
+![Registros com valores faltantes](valores-faltantes.png)
+
+Nota-se que as colunas *doi* e *paginas* contém o maior número de dados faltantes ou inelegíveis. Para fins exploratórios, essas colunas não são relevantes para as análises, então não foi um problema. Outra coluna que tinha vários valores faltantes é a 
+
 ## 2.3 Preparação dos Dados
 
-Abrange todas as atividades para construir o conjunto final de dados, realizando o tratamento, seleção, limpeza e estruturação dos dados disponíveis. O output desta preparação de dados são os dados finais que serão utilizados para o desenvolvimento do modelo. [6]
+Esta fase abrange todas as atividades para construir o conjunto final de dados, realizando o tratamento, seleção, limpeza e estruturação dos dados disponíveis. O output desta preparação de dados são os dados finais que serão utilizados para o desenvolvimento do modelo. [6]
 
 ## 2.3.1 Transformando em _Dataframes_
 
-Descrever...
+Para a obtenção de melhores recursos para manipulação dos dados, foi transformado todos os dados em _dataframes_. Nota-se a presença de novas colunas referentes aos periódicos que foram obtidas através dos comandos baixo:
 
 ```{r eval=FALSE} 
 # Arquitetura
@@ -170,7 +182,7 @@ df_pub_design <- sapply(publicacoes_design, ldply, data.frame) %>% bind_rows() %
 
 ## 2.3.2 Descrição dos _Dataframes_
 
-Descrever...
+Com a adição das novas colunas sobre os periódicos de cada registro, o _dataset_ passou de 11 para 27 colunas.
 
 ```{r eval=FALSE} 
 # Arquitetura
@@ -182,7 +194,9 @@ head(df_pub_design)
 
 ### 2.3.3 Separação de Publicações por autor
 
-Descrever...
+No atual _dataset_, cada registro de publicação possui um _array_ de autores que participaram na confecção do mesmo. Apesar disso, não estava sendo considerado o autor endógeno nesta contagem. Isso poderia projetar informações errôneas sobre os autores.
+
+Então, para contornar este problema, foi utilizado os comandos abaixo para comparar a lista de autores e autores endogenos e analisar o que é distinto entre eles. Por fim foi criado mais uma coluna com os autores reais de cada publicação.
 
 ```{r eval=FALSE} 
 # Arquitetura
@@ -194,7 +208,7 @@ pub_design_autores.endo <- df_pub_design %>% unnest(autores.endogeno) %>% distin
 
 ### 2.3.4 Separação de Periódicos por Autor
 
-Descrever...
+Nesta etapa foi separado os periódicos por cada autor, deixando as informações prontas para serem projetadas em um gráfico para realizarmos a análise.
 
 ```{r eval=FALSE}
 # Arquitetura
@@ -202,6 +216,22 @@ pub_arquitetura_periodicos <- pub_arquitetura_autores.endo %>% filter(is.element
 
 # Design
 pub_design_periodicos <- pub_design_autores.endo %>% filter(is.element(pub_design_autores.endo$periodico, pub_design_autores.endo$ano))
+```
+
+### 2.3.5 Separação de Periódicos por País
+
+Foi feita também uma manipulação de dados para separar as publicações por país, de modo que também ficasse pronto para uma projeção no `ggplot2`.
+
+```{r eval=FALSE}
+# Arquitetura
+pub_arquitetura_group <- select(pub_arquitetura_periodicos, c("periodico", "pais_de_publicacao"))
+arquitetura_qtde_pub_pais <- pub_arquitetura_group %>% add_count(pais_de_publicacao)
+arquitetura_qtde_pub_pais_distinct <- arquitetura_qtde_pub_pais %>% distinct(pais_de_publicacao, n)
+
+# Design
+pub_design_group <- select(pub_design_periodicos, c("periodico", "pais_de_publicacao"))
+design_qtde_pub_pais <- pub_design_group %>% add_count(pais_de_publicacao)
+design_qtde_pub_pais_distinct <- design_qtde_pub_pais %>% distinct(pais_de_publicacao, n)
 ```
 
 ## 2.4 Modelagem
@@ -250,15 +280,6 @@ Explicar...
 
 ### 2.6.2 Publicações por País
 
-Descrever...
-
-```{r eval=FALSE}
-# Arquitetura
-pub_arquitetura_group <- select(pub_arquitetura_periodicos, c("periodico", "pais_de_publicacao"))
-arquitetura_qtde_pub_pais <- pub_arquitetura_group %>% add_count(pais_de_publicacao)
-arquitetura_qtde_pub_pais_distinct <- arquitetura_qtde_pub_pais %>% distinct(pais_de_publicacao, n)
-```
-
 Explicar...
 
 ```{r eval=FALSE}
@@ -287,13 +308,6 @@ head(arquitetura_qtde_pub_pais_distinct, n = 14L)
 ![Departamento de Arquitetura - Número de Publicações por País](publicacoes-pais-arquitetura-tabela.png)
 
 Interpretar Gráfico...
-
-```{r eval=FALSE}
-# Arquitetura
-pub_design_group <- select(pub_design_periodicos, c("periodico", "pais_de_publicacao"))
-design_qtde_pub_pais <- pub_design_group %>% add_count(pais_de_publicacao)
-design_qtde_pub_pais_distinct <- design_qtde_pub_pais %>% distinct(pais_de_publicacao, n)
-```
 
 Explicar...
 
