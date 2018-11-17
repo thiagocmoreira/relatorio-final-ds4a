@@ -19,7 +19,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # 1. Introdução
 
-## 1.1 Ciência de Dados
+Este relatório se propõe a explorar, interpretar e analisar cursos de Pós Graduação da Universidade de Brasília (UnB). Mais especificamente na área de conhecimento de Arquitetura e Urbanismo e Design. Como fonte de pesquisa será utilizada a plataforma e-Lattes UnB, que disponibiliza arquivos _json_ de todos os cursos da UnB. Nestes arquivos podemos explorar dados que contém informações sobre *publicações*, *perfil dos autores das publicações*, *período de atuação dos autores*, *categorias das publicações em cada ano*, dentre outros.
+
+Além da análise dos dados, será apresentado um referencial teórico sobre as áreas de conhecimento presentes neste relatório, além da aplicação da metodologia *CRISP-DM* que é utilizada na Ciência de Dados.
+
+### 1.1 Ciência de Dados
 
 Data Science ou Ciência de Dados permite a extração de informações extremamente valiosas a partir de dados contidos em qualquer corporação ou empresa. Na era do Big Data, a ciência de dados está se tornando um campo promissor para processar grandes volumes gerados por diversas fontes e em diferentes velocidades. [5]
 
@@ -64,7 +68,7 @@ A área de Tecnologia, Ambiente e Sustentabilidade compreende estudos relativos 
 
 A área de Projeto e Planejamento abarca estudos sobre políticas, planos e gestão em escalas diversas, do edifício ao território. As pesquisas voltadas para o âmbito edilício envolvem estratégias projetuais, configuração, representação e acessibilidade. Entre os temas diversos dos estudos relacionados ao urbano, podem-se citar análises e proposições sobre planejamento urbano e territorial, legislação, reabilitação, regularização fundiária urbana e mobilidade. [2]
 
-## 1.2.2 Design
+### 1.2.2 Design
 
 No segundo semestre de 2013 foi criado o curso de mestrado acadêmico em Design. O Programa de Pós Graduação em Design da Universidade de Brasília - PPG Design UnB - faz parte do Instituto de Artes e do Departamento de Design da UnB.
 
@@ -84,22 +88,26 @@ O desenvolvimento e apresentação de resultados, como sugerido no plano de ensi
 
 O processo é composto por 6 (seis) grandes etapas principais: Business Understanding; Data Understanding; Data Preparation; Modeling; Evaluation; Deployment. É importante destacar que o processo e ela é interativa e incremental e não necessariamente linear de uma fase para a outra, o que pode ser visto na figura a seguir. [6]
 
+No relatório, o CRISP-DM será utilizado como metodologia de exploração de dados, a fim de obter uma
+
 
 ## 2.1 Compreensão de Negócios
 
 A primeira e uma das etapas mais importantes do processo consiste em realizar e extrair informações relevantes sobre qual o contexto a ser trabalhado, qual a área de conhecimento, quais os objetivos e requisitos do projeto para poder, assim, traçar um plano claro sobre as ações que devem ser tomadas. [6]
 
-*Descrever o nosso...*
+No contexto da disciplina de Data Science 4 All (DS4A) & Ciência de Dados Aplicada, nos cursos de Arquitetura e Urbanismo e Design, o objetivo traçado foi extrair informações relevantes referentes as publicações e os autores destes cursos, tais como publicações por ano, publicações por país, palavras relevantes nas publicações, autores com mais publicações, dentre outros.
 
 ## 2.2 Compreensão dos dados
 
-Com a primeira fase já previamente estabelecida, uma outra etapa tão importante quanto é a fase de inspecionar, organizar e descrever os dados disponíveis para a resolução do problema. É uma etapa importante também para a familiarização com os dados de insumo para a realização das análises, possibilitando também que alguns insights sejam previamente levados em consideração para etapas futuras. [6]
+Com a primeira fase já previamente estabelecida, uma outra etapa tão importante quanto, é a fase de onde somos capaz de inspecionar, organizar e descrever os dados disponíveis para a resolução do problema. É uma etapa importante também para a familiarização com os dados de insumo para a realização das análises, possibilitando também que alguns _insights_ sejam previamente levados em consideração para etapas futuras. [6]
 
 O estudo de todas as tabelas disponíveis e realizar a medição da possibilidade de criação de uma visão única para a análise também é parte dessa fase. [6]
 
+Visto isso, foram realizados os passos abaixo para realizar análises relevantes dos datasets disponíveis.
+
 ### 2.2.1 Importando as bibliotecas
 
-Descrever...
+Primeiramente foi importado as bibliotecas para possibilitar a leitura e manipulação dos dados.
 
 ```{r eval=FALSE} 
 library(jsonlite)
@@ -114,6 +122,8 @@ library(scales)
 
 ## 2.2.2 Importando arquivos de publicações no formato JSON
 
+O arquivos importados abaixos representam os dados sobre publicações disponibilizados pela plataforma e-Lattes da UnB dos cursos citados acima.
+
 ```{r eval=FALSE} 
 publicacoes_arquitetura <- fromJSON("ArquiteturaPos/235.publication.json")
 publicacoes_design <- fromJSON("DesignPos/267.publication.json")
@@ -121,12 +131,26 @@ publicacoes_design <- fromJSON("DesignPos/267.publication.json")
 
 ## 2.2.3 Descrição dos Dados
 
-Descrever...
+Foi utilizado a função `head()` para ter uma prévia das colunas e alguns registros presentes nos arquivos _json_ importados.
 
 ```{r eval=FALSE}
 head(publicacoes_arquitetura)
 head(publicacoes_design)
 ```
+
+Com isso, foi possível observar a presença das seguintes colunas no _json_ de publicações:
+
+- *natureza*: Status atual da publicação;
+- *titulo*: Título da publicação;
+- *nome_do_evento*: Evento no qual foi plubicado;
+- *ano_do_trabalho*: Ano que a publicação foi feita;
+- *pais_do_evento*: País sede do evento da publicação;
+- *cidade_do_evento*: Cidade do evento da publicação;
+- *doi*: Código universal da publicação (DOI);
+- *classificação*: Internacionalização da publicação;
+- *paginas*: Páginas onde se encontra a publicação;
+- *autores*: Lista dos criadores da publicação;
+- *autores-endogeno*: Autores endógenos da publicação.
 
 ## 2.3 Preparação dos Dados
 
