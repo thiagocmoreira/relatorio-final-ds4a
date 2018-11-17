@@ -117,6 +117,12 @@ library(RColorBrewer) # Editar paleta de cores dos gráficos
 library(stringr) # Facilita a manipulação de strings
 library(ggplot2) # Criação e plot de gráficos
 library(tidyr) # Manipulação de Dataframes
+Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_191') # Setando o local da instalação do Java
+library(rJava) # Java para R (dependência do qdap)
+library(qdap) # Manipulação de texto e linguagem natural
+library(tm) # Mineração de texto
+library(SnowballC) # Steaming
+library(wordcloud2) # Visualização em nuvem de palavras
 ```
 
 ## 2.2.2 Importando arquivos de publicações no formato JSON
@@ -175,9 +181,11 @@ Para a obtenção de melhores recursos para manipulação dos dados, foi transfo
 ```{r eval=FALSE} 
 # Arquitetura
 df_pub_arquitetura <- sapply(publicacoes_arquitetura, ldply, data.frame) %>% bind_rows() %>% as_tibble()
+tbl_arq_publ <- tbl_df(df_pub_arquitetura)
 
 # Design
 df_pub_design <- sapply(publicacoes_design, ldply, data.frame) %>% bind_rows() %>% as_tibble()
+tbl_design_publ <- tbl_df(df_pub_design)
 ```
 
 ## 2.3.2 Descrição dos _Dataframes_
@@ -240,7 +248,34 @@ Essa fase é uma etapa mais voltada para Pesquisa e Desenvolvimento, onde são s
 
 A comunicação com a fase de preparação de dados nessa fase é muito importante, para a experimentação e modelagem utilizando diferentes técnicas e abordagens. [6]
 
-*Fazer...*
+Foi escolhido o _bag of words_ como modelo de mineração de texto. A ideia é encontrar as palavras mais constantes no título dos periódicos, a fim de ver a tendência de palavras chaves que os autores mais utilizam em suas publicações.
+
+### 2.4.1 Construção do _Bag of Words_
+
+Descrever...
+
+```{r eval=FALSE}
+# Arquitetura
+titulos <- paste(tbl_arq_publ$titulo, collapse = ' ')
+titulos <- removeWords(titulos, c(stopwords('pt'), stopwords('en')))
+term_count <- freq_terms(titulos, 25)
+term_count <- term_count[!(nchar(term_count$WORD) <= 3),]
+
+# Design
+titulos2 <- paste(tbl_design_publ$titulo, collapse = ' ')
+titulos2 <- removeWords(titulos2, c(stopwords('pt'), stopwords('en')))
+term_count2 <- freq_terms(titulos2, 25)
+term_count2 <- term_count2[!(nchar(term_count2$WORD) <= 3),]
+```
+
+### 2.4.1 Verificação das palavras e seus sinônimos (Stem)
+
+Descrever...
+
+```{r eval=FALSE}
+# titulos <- tm_map(titulos, stemDocument)
+```
+
 
 ## 2.5 Avaliação do Modelo
 
@@ -312,6 +347,7 @@ Interpretar Gráfico...
 Explicar...
 
 ```{r eval=FALSE}
+wordcloud2(term_count, color = "random-light", minRotation = -pi/6, maxRotation = -pi/6, minSize = 10, rotateRatio = 1)
 ggplot(design_qtde_pub_pais_distinct, aes(x= "", y= n, fill = design_qtde_pub_pais_distinct$pais_de_publicacao)) +
 ggtitle("Qtde de Publicações por País - Pós Graduação Design") +
 geom_bar(width = 1, stat ="identity") +
@@ -334,6 +370,38 @@ head(design_qtde_pub_pais_distinct, n = 6L)
 ![Departamento de Design - Número de Publicações por País](publicacoes-pais-design-tabela.png)
 
 Interpretar Gráfico...
+
+### 2.6.3 Contagem de palavras chave
+
+Explicar...
+
+```{r eval=FALSE}
+plot(term_count)
+```
+
+![Departamento de Arquitetura - Contagem de palavras chave](term-count.png)
+
+```{r eval=FALSE}
+plot(term_count2)
+```
+
+![Departamento de Design - Contagem de palavras chave](term-count2.png)
+
+### 2.6.4 Nuvem de palavras
+
+Explicar...
+
+```{r eval=FALSE}
+wordcloud2(term_count, size=1.6, color='random-light', backgroundColor="black")
+```
+
+![Departamento de Arquitetura - Nuvem de palavras chave](cloud1.png)
+
+```{r eval=FALSE}
+wordcloud2(term_count2, size=1.6)
+```
+
+![Departamento de Design - Nuvem de palavras chave](cloud2.png)
 
 # Referências
 
