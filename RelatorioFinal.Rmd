@@ -97,6 +97,16 @@ A primeira e uma das etapas mais importantes do processo consiste em realizar e 
 
 No contexto da disciplina de Data Science 4 All (DS4A) & Ciência de Dados Aplicada, nos cursos de Arquitetura e Urbanismo e Design, o objetivo traçado foi extrair informações relevantes referentes as publicações e os autores destes cursos, tais como publicações por ano, publicações por país, palavras relevantes nas publicações, autores com mais publicações, dentre outros.
 
+### 2.1.1 O Contexto
+
+Atualmente, a sociedade vive um processo de transição para algo que nós chamamos de Quarta Revolução Industrial [7]. "Estamos a bordo de uma revolução tecnológica que transformará fundamentalmente a forma como vivemos, trabalhamos e nos relacionamos. Em sua escala, alcance e complexidade, a transformação será diferente de qualquer coisa que o ser humano tenha experimentado antes" como cita o alemão Klaus Schwab em seu livro "A Quarta Revolução Industrial", e esta, por sua vez, é caracterizada pela era em que vivemos hoje em dia: a sociedade do conhecimento.
+
+Uma característica importantíssima que caracteriza nossa sociedade hoje em dia é a aquisição de conhecimento e a valorização do mesmo no mercado profissional, onde o foco principal é a transformação de informação em conhecimento [8]. Com isso em mente, tem-se que a evolução da sociedade tem como objetivo aumentar o número de pessoas qualificadas nos seus diversos contextos científicos e acadêmicos.
+
+O Programa Nacional de Pós-Graduação integrado por programas de pós-graduação avaliados e reconhecidos pela Coordenação de Aperfeiçoamento de Pessoal de Nível Superior (CAPES) é um dos principais responsáveis pela produção de conhecimento científico no país [9].
+
+
+
 ## 2.2 Compreensão dos dados
 
 Com a primeira fase já previamente estabelecida, uma outra etapa tão importante quanto, é a fase de onde somos capaz de inspecionar, organizar e descrever os dados disponíveis para a resolução do problema. É uma etapa importante também para a familiarização com os dados de insumo para a realização das análises, possibilitando também que alguns _insights_ sejam previamente levados em consideração para etapas futuras. [6]
@@ -411,3 +421,9 @@ wordcloud2(term_count2, size=1.6)
 4. [PGG - Departamento de Design](http://design.unb.br/index.php?option=com_content&view=article&id=56&Itemid=167&lang=pt-br).
 5. [Introdução à Ciência de Dados 2.0 - Data Science Academy](https://www.datascienceacademy.com.br/course?courseid=introduo--cincia-de-dados).
 6. [Afinal, o que é Data Science? - ABG Consultoria Estatística](http://www.abgconsultoria.com.br/blog/afinal-o-que-e-data-science/).
+7. [O que é a 4ª revolução industrial - e como ela deve afetar nossas vidas](http://g1.globo.com/economia/negocios/noticia/2016/10/o-que-e-a-4a-revolucao-industrial-e-como-ela-deve-afetar-nossas-vidas.html)
+8. [A sociedade do conhecimento](https://www.portaleducacao.com.br/conteudo/artigos/esporte/a-sociedade-do-conhecimento/43151)
+9. Formação docente e o campo educacional: políticas, regulações e
+processos. In: OLIVEIRA, Dalila Andrade; VIEIRA, Lívia Fraga (Orgs.).
+Trabalho na Educação Básica: a condição docente em sete estados brasileiros.
+Belo Horizonte: Fino Traço, 2012. p. 131-151.
