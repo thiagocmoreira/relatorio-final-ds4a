@@ -105,6 +105,20 @@ Uma característica importantíssima que caracteriza nossa sociedade hoje em dia
 
 O Programa Nacional de Pós-Graduação integrado por programas de pós-graduação avaliados e reconhecidos pela Coordenação de Aperfeiçoamento de Pessoal de Nível Superior (CAPES) é um dos principais responsáveis pela produção de conhecimento científico no país [9].
 
+O gráfico abaixo mostra a evolução na quantidade de programas de Pós-graduação desde de 1998 à 2017, dados fornecidos pelo GEOCAPES.
+
+```{r eval=FALSE} 
+library(dplyr)
+library(magrittr)
+library(ggplot2)
+
+dados.geocapes <- read.csv("dados/dados-geocapes.CSV", sep=";")
+aggregated <- aggregate(dados.geocapes$Total.Linha, by=list(dados.geocapes$Ano, dados.geocapes$UF), FUN=sum)
+color.list <- c("#FF5A5F", "#FFB400", "#007A87",  "#FFAA91", "#7B0051", "#3b5998", "#6d84b4", "#afbdd4", "#d8dfea", "#5380E4", "#E12A3C", "#FFBF03", "#00B723", "#F14000", "#67B6C3", "#F0DA47", "#EBEBE6", "#D0D0CB", "#55ACEE", "#292f33", "#8899a6", "#e1e8ed", "#3595D6","#92C746","#F2C100","#FF6D19", "#6F3598")
+ggplot(data=aggregated, aes(x=Group.1, y=x)) + geom_bar(mapping = aes(x=Group.1, fill=Group.2),  stat = "identity") + scale_fill_manual(values = color.list )
+
+```
+
 
 
 ## 2.2 Compreensão dos dados
