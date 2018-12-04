@@ -8,9 +8,9 @@ author:
 # date: "17 de Novembro de 2018"
 indent: true
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -107,19 +107,30 @@ O Programa Nacional de Pós-Graduação integrado por programas de pós-graduaç
 
 O gráfico abaixo mostra a evolução na quantidade de programas de Pós-graduação desde de 1998 à 2017, dados fornecidos pelo GEOCAPES.
 
-```{r eval=FALSE} 
+```{r echo=TRUE}
 library(dplyr)
 library(magrittr)
 library(ggplot2)
 
-dados.geocapes <- read.csv("dados/dados-geocapes.CSV", sep=";")
-aggregated <- aggregate(dados.geocapes$Total.Linha, by=list(dados.geocapes$Ano, dados.geocapes$UF), FUN=sum)
-color.list <- c("#FF5A5F", "#FFB400", "#007A87",  "#FFAA91", "#7B0051", "#3b5998", "#6d84b4", "#afbdd4", "#d8dfea", "#5380E4", "#E12A3C", "#FFBF03", "#00B723", "#F14000", "#67B6C3", "#F0DA47", "#EBEBE6", "#D0D0CB", "#55ACEE", "#292f33", "#8899a6", "#e1e8ed", "#3595D6","#92C746","#F2C100","#FF6D19", "#6F3598")
-ggplot(data=aggregated, aes(x=Group.1, y=x)) + geom_bar(mapping = aes(x=Group.1, fill=Group.2),  stat = "identity") + scale_fill_manual(values = color.list )
+dados.geocapes <- read.csv("dados/dados-pos-graduacao-geocapes.CSV", sep=";")
+summarized <- dados.geocapes %>% group_by(Ano, UF) %>% summarise(n=n())
+color.list <- c("#FF5A5F", "#FFB400", "#007A87", "#FFAA91", "#7B0051", "#3b5998", "#6d84b4", "#afbdd4", "#d8dfea", "#5380E4", "#E12A3C", "#FFBF03", "#00B723", "#F14000", "#67B6C3", "#F0DA47", "#EBEBE6", "#D0D0CB", "#55ACEE", "#292f33", "#8899a6", "#e1e8ed", "#3595D6","#92C746","#F2C100","#FF6D19", "#6F3598")
+ggplot(title="Teste",data=summarized, aes(x=Ano, y=n)) + geom_bar( mapping = aes(x=Ano, fill=UF),  stat = "identity") + scale_fill_manual(values = color.list )
 
 ```
 
 
+De acordo com o gráfico, com o passar dos anos, o interesse e criação de cursos de pós-graduação obtiveram um aumento significativo dentro dos útimos 19 anos, onde, em São Paulo, por exemplo, o número de programas em 1998 era de 450 e hoje ultrapassa o dobro desse valor, com 915 programas. A quantidade total de programas aumentou de 1.259 para 4.296 no mesmo período. A mesma tendência de evolução seguiu tanto para o número de discentes que aumentou de 44274 para 90188 também no estado de São Paulo.
+
+Dos principais objetivos do PNPG de 2011 à 2020 estão:
+
+* Estímulo à criação de Programas com ciclo completo (Mestrado e Doutorad);
+* Inserção do Mestrado profissional;
+* Internacionalização
+    * envio de estudantes e docentes ao exterior;
+    * aumento da quantidade e qualidade de publicações;
+    * estímulo à participação em eventos no exterior;
+    * atrair discentes e docentes à estudarem no exterior.
 
 ## 2.2 Compreensão dos dados
 
