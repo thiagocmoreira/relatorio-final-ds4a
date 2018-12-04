@@ -8,9 +8,9 @@ author:
 # date: "17 de Novembro de 2018"
 indent: true
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -227,7 +227,7 @@ tbl_design_publ <- tbl_df(df_pub_design)
 
 Com a adição das novas colunas sobre os periódicos de cada registro, o _dataset_ passou de 11 para 27 colunas.
 
-```{r eval=FALSE} 
+```{r eval=FALSE}
 # Arquitetura
 head(df_pub_arquitetura)
 
@@ -287,28 +287,81 @@ Foi escolhido o _bag of words_ como modelo de mineração de texto. A ideia é e
 
 ### 2.4.1 Construção do _Bag of Words_
 
-Descrever...
+Como dito anteriormente, o _Bag of Words_ foi o modelo de mineração de texto escolhido para o relatório, que é muito utilizado em algoritmos de processamento de linguagem natural e análise de sentimentos. Seu objetivo é fazer uma representação das palavras mais recorrentes em um texto, desconsiderando alguns fatores como a ordem em que as palavras se encontram e a gramática. No fim o _Bag of Words_ tem o _tracking_ da quantidade dessas palavras, e podemos tirar conclusões sobre o resultado apresentado.
 
 ```{r eval=FALSE}
 # Arquitetura
 titulos <- paste(tbl_arq_publ$titulo, collapse = ' ')
 titulos <- removeWords(titulos, c(stopwords('pt'), stopwords('en')))
 term_count <- freq_terms(titulos, 25)
-term_count <- term_count[!(nchar(term_count$WORD) <= 3),]
 
 # Design
 titulos2 <- paste(tbl_design_publ$titulo, collapse = ' ')
 titulos2 <- removeWords(titulos2, c(stopwords('pt'), stopwords('en')))
 term_count2 <- freq_terms(titulos2, 25)
+```
+
+
+O foco do modelo criado foi observar a tendência que os discentes têm ao criar suas publicações, tendo como base o título das publicações. Para tal, a primeira manipulação de dados feita foi agrupar todos os títulos das publicações em um texto só, para poder aplicar o modelo. Isso foi feito tanto para o curso de Arquitetura quanto para o de Design.
+
+Em seguida, foi retirado dos títulos agrupados as palavras de parada, que são as palavras irrelevantes dentro dos títulos. Foi utilizado o `stopwords` do pacote `qdap`, que contém uma lista de palavras de parada de acordo com o idioma informado. Como há prevalência tanto de publicações em português quanto em inglês,
+foram utilizadas listas de palavras de parada nestes dois idiomas. Por fim esse agrupamento de listas de palavras foram removidos do agrupamento de títulos.
+
+Após isso, com os dados tratados, a contagem de termos foi feita, onde foi passado como parâmetro o número 25 que diz o número de palavras mais constantes, em ordem decrescente de aparições, para observação inicial da contagem.
+
+```{r eval=FALSE}
+plot(term_count)
+```
+
+![Departamento de Arquitetura - Contagem de palavras chave](term-count.png)
+
+```{r eval=FALSE}
+plot(term_count2)
+```
+
+![Departamento de Design - Contagem de palavras chave](term-count2.png)
+
+Foi observado que o uso das palavras de parada de cada idioma não foi tão eficaz quanto esperado, onde algumas palavras passaram pelo filtro criado. Para contornar este problema, foi feita outra modificação nos dados, onde foram retiradas as palavras que tinham 3 caracteres ou menos, para se obter um melhor resultado.
+
+```{r eval=FALSE}
+# Arquitetura
+term_count <- term_count[!(nchar(term_count$WORD) <= 3),]
+
+# Design
 term_count2 <- term_count2[!(nchar(term_count2$WORD) <= 3),]
 ```
 
-### 2.4.1 Verificação das palavras e seus sinônimos (Stem)
-
-Descrever...
+Com isso, foi possível plotar o gráfico com a nova contagem de palavras e ver os resultados.
 
 ```{r eval=FALSE}
-# titulos <- tm_map(titulos, stemDocument)
+plot(term_count)
+```
+
+![Departamento de Arquitetura - Nova contagem de palavras chave](2term-count.png)
+
+```{r eval=FALSE}
+plot(term_count2)
+```
+
+![Departamento de Arquitetura - Nova contagem de palavras chave](2term-count2.png)
+
+Após essa manipulação foi possível observar que o modelo com a contagem de palavras chave foi mais eficaz em busca do seu objetivo, pois as palavras irrelevantes foram retiradas.
+
+Com os dados normalizados, foi possível criar um _Bag of Words_ mais robusto para posteriormente criarmos uma visualização em nuvem, onde as palavras mais presentes tem tamanho maior na nuvem.
+
+
+```{r eval=FALSE}
+# Arquitetura
+titulos_bag <- paste(tbl_arq_publ$titulo, collapse = ' ')
+titulos_bag <- removeWords(titulos, c(stopwords('pt'), stopwords('en')))
+term_count_bag <- freq_terms(titulos, 2500)
+term_count_bag <- term_count_bag[!(nchar(term_count_bag$WORD) <= 3),]
+
+# Design
+titulos2_bag <- paste(tbl_design_publ$titulo, collapse = ' ')
+titulos2_bag <- removeWords(titulos2, c(stopwords('pt'), stopwords('en')))
+term_count2_bag <- freq_terms(titulos2, 2500)
+term_count2_bag <- term_count2_bag[!(nchar(term_count2_bag$WORD) <= 3),]
 ```
 
 
@@ -401,39 +454,24 @@ head(design_qtde_pub_pais_distinct, n = 6L)
 
 ```
 
+
 ![Departamento de Design - Proporção de Publicações por País](publicacoes-pais-design-grafico.png)
 ![Departamento de Design - Número de Publicações por País](publicacoes-pais-design-tabela.png)
 
 Interpretar Gráfico...
 
-### 2.6.3 Contagem de palavras chave
+### 2.6.3 Nuvem de palavras
 
 Explicar...
 
 ```{r eval=FALSE}
-plot(term_count)
-```
-
-![Departamento de Arquitetura - Contagem de palavras chave](term-count.png)
-
-```{r eval=FALSE}
-plot(term_count2)
-```
-
-![Departamento de Design - Contagem de palavras chave](term-count2.png)
-
-### 2.6.4 Nuvem de palavras
-
-Explicar...
-
-```{r eval=FALSE}
-wordcloud2(term_count, size=1.6, color='random-light', backgroundColor="black")
+wordcloud2(term_count_bag, size=1.6, color='random-light', backgroundColor="black")
 ```
 
 ![Departamento de Arquitetura - Nuvem de palavras chave](cloud1.png)
 
 ```{r eval=FALSE}
-wordcloud2(term_count2, size=1.6)
+wordcloud2(term_count2_bag, size=1.6)
 ```
 
 ![Departamento de Design - Nuvem de palavras chave](cloud2.png)
