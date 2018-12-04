@@ -44,43 +44,6 @@ A aplicação Coleta de Dados é um sistema informatizado da Capes, desenvolvido
 
 A Plataforma Sucupira é uma importante ferramenta para coletar informações, realizar análises e avaliações e ser a base de referência do Sistema Nacional de Pós-Graduação - SNPG. A Plataforma deve disponibilizar em tempo real e com muito mais transparência as informações, processos e procedimentos que a Capes realiza no SNPG para toda a comunidade acadêmica. [3]
 
-### 1.2.1 Arquitetura e Urbanismo
-
-Simultaneamente à criação da Universidade de Brasília em 1962, o Curso de Mestrado em Arquitetura foi iniciado como o primeiro do país nesta área.  Em 1965 o curso foi sumariamente encerrado devido à crise política do período, retornando apenas em 1976 no  quadro do 2o Plano Nacional de Desenvolvimento com a criação do Mestrado em Planejamento Urbano.
-
-O objetivo principal era atender as demandas por capacitação de recursos humanos no campo das políticas públicas e do desenvolvimento das cidades, contando com apoio do então Conselho Nacional de Política Urbana da Secretaria de Planejamento. [1]
-
-Em 1986, foi criado o Mestrado em Desenho Urbano para o estudo da configuração físico-espacial das cidades. Este programa se consolidou como um dos principais centros de irradiação de conhecimentos nas áreas de Planejamento e Desenho Urbano.
-
-Com mais de 40 anos de existência, O Programa de Pesquisa e Pós-Graduação da Faculdade de Arquitetura e Urbanismo da Universidade de Brasília (PPG-FAU/UnB) enfrentou desafios e transformações. Na última década o perfil do corpo de docentes e pesquisadores perceberam a necessidade de uma nova estrutura para abranger as mudanças no Curso de Mestrado e a criação do Curso de Doutorado em Arquitetura e Urbanismo. Em 2002 a proposta foi aprovada pela CAPES.
-
-As áreas de concentração de pesquisa em que o Programa se fundamenta são: 
-
-- *Teoria, história e crítica*
-
-A área de concentração Teoria, História e Crítica realiza pesquisas em torno dos processos históricos de concepção, transformação e reflexão sobre arte, arquitetura e cidade. A formação nessa área transita desde os fundamentos epistemológicos e sociais da cultura material até a articulação crítica do pensamento sobre o patrimônio cultural, passando pelo estudo empírico e documental, com metodologias diversas e enfoque interdisciplinar. Acolhe recortes espaço-temporais diversos, com ênfase na região de Brasília em perspectiva diacrônica. [2]
-
-- *Tecnologia, ambiente e sustentabilidade*
-
-A área de Tecnologia, Ambiente e Sustentabilidade compreende estudos relativos a técnicas e processos ligados à produção da Arquitetura e do ambiente construído, com especial atenção à questão da sustentabilidade. Os sistemas estruturais são estudados no âmbito específico da Arquitetura e etapas da construção, desde os projetos e técnicas de produção até seu desempenho são objeto de pesquisas. O contexto urbano comparece com pesquisas relativas a qualidade do espaço e sua gestão, reabilitação em seus aspectos físicos e socioambientais. [2]
-
-- *Projeto e Planejamento*
-
-A área de Projeto e Planejamento abarca estudos sobre políticas, planos e gestão em escalas diversas, do edifício ao território. As pesquisas voltadas para o âmbito edilício envolvem estratégias projetuais, configuração, representação e acessibilidade. Entre os temas diversos dos estudos relacionados ao urbano, podem-se citar análises e proposições sobre planejamento urbano e territorial, legislação, reabilitação, regularização fundiária urbana e mobilidade. [2]
-
-### 1.2.2 Design
-
-No segundo semestre de 2013 foi criado o curso de mestrado acadêmico em Design. O Programa de Pós Graduação em Design da Universidade de Brasília - PPG Design UnB - faz parte do Instituto de Artes e do Departamento de Design da UnB.
-
-Os objetivos do Programa são:
-
-- Possibilitar a formação de docentes na área de design com vistas a ampliação e melhor qualificação dos docentes na região Centro-Oeste e Norte do país.
-- Desenvolver pesquisadores em design, possibilitando o desenvolvimento tecnológico, cultural e econômico do país.
-- Aproximar o design da sociedade por meio de pesquisas relacionadas aos processos de produção e inovação com base tecnológica.
-
-O grupo do PPG Design UnB busca construir um programa de qualidade, integrado com as necessidades da pesquisa em design, ao mesmo tempo, ativo na produção do conhecimento e na busca por projetos cooperativos. Através de suas ações, contribui para ampliar as pesquisas em Design desenvolvidas na região, aumentando a produção bibliográfica e a geração de conhecimento e inovação. A diversidade da temática das pesquisas pode ser observada também no projetos de pesquisas dos discentes, sendo que muitos são oriundos de outros estados. Isto demonstra a vocação do PPG Design UnB em agregar pluralidade cultural e interdisciplinar que pode ser vista nos projetos de pesquisas desenvolvidos no programa. [4]
-
-As áreas de concentração de pesquisa em que o Programa se fundamenta são _Design, Tecnologia e Sociedade_.
 
 # 2. CRISP-DM
 
@@ -113,9 +76,9 @@ library(magrittr)
 library(ggplot2)
 
 dados.geocapes <- read.csv("dados/dados-pos-graduacao-geocapes.CSV", sep=";")
-summarized <- dados.geocapes %>% group_by(Ano, UF) %>% summarise(n=n())
+summarized <- dados.geocapes %>% group_by(Ano, UF) %>% summarise(Total=n())
 color.list <- c("#FF5A5F", "#FFB400", "#007A87", "#FFAA91", "#7B0051", "#3b5998", "#6d84b4", "#afbdd4", "#d8dfea", "#5380E4", "#E12A3C", "#FFBF03", "#00B723", "#F14000", "#67B6C3", "#F0DA47", "#EBEBE6", "#D0D0CB", "#55ACEE", "#292f33", "#8899a6", "#e1e8ed", "#3595D6","#92C746","#F2C100","#FF6D19", "#6F3598")
-ggplot(title="Teste",data=summarized, aes(x=Ano, y=n)) + geom_bar( mapping = aes(x=Ano, fill=UF),  stat = "identity") + scale_fill_manual(values = color.list )
+ggplot(title="Teste",data=summarized, aes(x=Ano, y=Total)) + geom_bar( mapping = aes(x=Ano, fill=UF),  stat = "identity") + scale_fill_manual(values = color.list )
 
 ```
 
@@ -132,6 +95,88 @@ Dos principais objetivos do PNPG de 2011 à 2020 estão:
     * estímulo à participação em eventos no exterior;
     * atrair discentes e docentes à estudarem no exterior.
 
+### 2.1.2 Arquitetura e Urbanismo
+
+Simultaneamente à criação da Universidade de Brasília em 1962, o Curso de Mestrado em Arquitetura foi iniciado como o primeiro do país nesta área.  Em 1965 o curso foi sumariamente encerrado devido à crise política do período, retornando apenas em 1976 no  quadro do 2o Plano Nacional de Desenvolvimento com a criação do Mestrado em Planejamento Urbano.
+
+O objetivo principal era atender as demandas por capacitação de recursos humanos no campo das políticas públicas e do desenvolvimento das cidades, contando com apoio do então Conselho Nacional de Política Urbana da Secretaria de Planejamento. [1]
+
+Em 1986, foi criado o Mestrado em Desenho Urbano para o estudo da configuração físico-espacial das cidades. Este programa se consolidou como um dos principais centros de irradiação de conhecimentos nas áreas de Planejamento e Desenho Urbano.
+
+Com mais de 40 anos de existência, O Programa de Pesquisa e Pós-Graduação da Faculdade de Arquitetura e Urbanismo da Universidade de Brasília (PPG-FAU/UnB) enfrentou desafios e transformações. Na última década o perfil do corpo de docentes e pesquisadores perceberam a necessidade de uma nova estrutura para abranger as mudanças no Curso de Mestrado e a criação do Curso de Doutorado em Arquitetura e Urbanismo. Em 2002 a proposta foi aprovada pela CAPES.
+
+
+As áreas de concentração de pesquisa em que o Programa se fundamenta são: 
+
+#### *Teoria, história e crítica*
+
+A área de concentração Teoria, História e Crítica realiza pesquisas em torno dos processos históricos de concepção, transformação e reflexão sobre arte, arquitetura e cidade. A formação nessa área transita desde os fundamentos epistemológicos e sociais da cultura material até a articulação crítica do pensamento sobre o patrimônio cultural, passando pelo estudo empírico e documental, com metodologias diversas e enfoque interdisciplinar. Acolhe recortes espaço-temporais diversos, com ênfase na região de Brasília em perspectiva diacrônica. [2]
+
+Dentro desta área estão as seguintes linhas de pesquisa:
+
+- História e Teoria da Arquitetura;
+- História e Teoria da Cidade e do Urbanismo;
+- Patrimônio e Preservação;
+- Estética, Hermenêutica e Semiótica.
+
+
+#### *Tecnologia, ambiente e sustentabilidade*
+
+A área de Tecnologia, Ambiente e Sustentabilidade compreende estudos relativos a técnicas e processos ligados à produção da Arquitetura e do ambiente construído, com especial atenção à questão da sustentabilidade. Os sistemas estruturais são estudados no âmbito específico da Arquitetura e etapas da construção, desde os projetos e técnicas de produção até seu desempenho são objeto de pesquisas. O contexto urbano comparece com pesquisas relativas a qualidade do espaço e sua gestão, reabilitação em seus aspectos físicos e socioambientais. [2]
+
+Dentro desta área estão as seguintes linhas de pesquisa:
+
+- Estruturas e Arquitetura;
+- Sustentabilidade, Qualidade e Eficiência do ambiente construído;
+- Tecnologia de produção do ambiente construído.
+
+
+#### *Projeto e Planejamento*
+
+A área de Projeto e Planejamento abarca estudos sobre políticas, planos e gestão em escalas diversas, do edifício ao território. As pesquisas voltadas para o âmbito edilício envolvem estratégias projetuais, configuração, representação e acessibilidade. Entre os temas diversos dos estudos relacionados ao urbano, podem-se citar análises e proposições sobre planejamento urbano e territorial, legislação, reabilitação, regularização fundiária urbana e mobilidade. [2]
+
+Dentro desta área estão as seguintes linhas de pesquisa:
+
+- Projeto e Planejamento Edilício;
+- Projeto e Planejamento Urbano e Regional.
+
+
+O programa conta com uma nota 4 de acordo com a última avaliação Quadrienal dentro do valor estabelecido das notas dos cursos da CAPES, que podem variar de 1 à 7. Segue o quadro com a avaliação do programa, tanto de mestado quanto para doutorado, desde sua criação.
+
+Nível | 1996 | 1998 | 2001 | 2004 | 2007 | 2008 | 2009 | 2010 | 2011 | 2012 | 2013 | 2014 | 2017
+----- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- 
+Mestrado | - | -	| 4|	4|	3|	3|	3|	4|	4|	4|	4|	4|	4
+Doutorado | C	|3	|4	|4	|3	|3	|3	|4	|4	|4	|4	|4|	4
+
+
+O curso atualmente conta 187 alunos de pós-graduação, sendo 114 de Mestrado e 73 de Doutorado. Dentro da função idealizada para a UnB, o programa tem como principal objetivo a formação de recursos humanos de alto nível para o desenvolvimento de atividades de docência e pesquisa, bem como a estruturação de um corpo técnico de especialistas para atuação em órrgãos públicos. Em  relação à avaliação anterior, 8 alunos permanecem como estudantes, 17 alunos trabalham fora da esfera pública ou da docência, 57 alunos trabalham no setor de educação e 39 alunos são servidores públicos. À partir disso, pode-se observar que de maneira geral os objetivos têm sido alcançados, com a maior espera de participantes do programa atuam na educação ou serviço público.
+
+O número total de Docentes é de 42, sendo 30 permanentes, 12 colaboradores e 0 visitantes. De acordo com o quadro de Corpo Docente da avaliação, o quadro de DP ou Docentes Permanentes iniciou com 24 docentes permanentes, aumentando para 29 em 2014, com perda de três, totalizando 26 em 2016 e no final do período com os mesmos 29 de 2014. Já o número de colaboradores aumentou de 11 para 12 no período.
+Em relação à área de atuação do corpo estão: Arquitetura e Urbanismo, Eng. Civil e Construção Civil, Ergonomia, Historia, Sociologia e Tecnologia.
+
+Para o programa de arquitetura e urbanismo, o programa contou com 79 disciplinas dentro das 9 linhas de pesquisas citadas, com registro de 119 Projetos de Pesquisa.
+
+
+### 2.1.3 Design
+
+No segundo semestre de 2013 foi criado o curso de mestrado acadêmico em Design. O Programa de Pós Graduação em Design da Universidade de Brasília - PPG Design UnB - faz parte do Instituto de Artes e do Departamento de Design da UnB.
+
+Os objetivos do Programa são:
+
+- Possibilitar a formação de docentes na área de design com vistas a ampliação e melhor qualificação dos docentes na região Centro-Oeste e Norte do país.
+- Desenvolver pesquisadores em design, possibilitando o desenvolvimento tecnológico, cultural e econômico do país.
+- Aproximar o design da sociedade por meio de pesquisas relacionadas aos processos de produção e inovação com base tecnológica.
+
+O grupo do PPG Design UnB busca construir um programa de qualidade, integrado com as necessidades da pesquisa em design, ao mesmo tempo, ativo na produção do conhecimento e na busca por projetos cooperativos. Através de suas ações, contribui para ampliar as pesquisas em Design desenvolvidas na região, aumentando a produção bibliográfica e a geração de conhecimento e inovação. A diversidade da temática das pesquisas pode ser observada também no projetos de pesquisas dos discentes, sendo que muitos são oriundos de outros estados. Isto demonstra a vocação do PPG Design UnB em agregar pluralidade cultural e interdisciplinar que pode ser vista nos projetos de pesquisas desenvolvidos no programa. [4]
+
+As áreas de concentração de pesquisa em que o Programa se fundamenta são _Design, Tecnologia e Sociedade_.
+
+Segue a tabela disposta das notas do programa em sua última avaliação quadrienal
+
+Nível | 2013 | 2014 | 2017
+----- | ---- | ---- | ----
+Mestrado | 3 | 3 | 3
+
 ## 2.2 Compreensão dos dados
 
 Com a primeira fase já previamente estabelecida, uma outra etapa tão importante quanto, é a fase de onde somos capaz de inspecionar, organizar e descrever os dados disponíveis para a resolução do problema. É uma etapa importante também para a familiarização com os dados de insumo para a realização das análises, possibilitando também que alguns _insights_ sejam previamente levados em consideração para etapas futuras. [6]
@@ -144,7 +189,7 @@ Visto isso, foram realizados os passos abaixo para realizar análises relevantes
 
 Primeiramente foi importado as bibliotecas para possibilitar a leitura e manipulação dos dados.
 
-```{r eval=FALSE} 
+```{r echo=TRUE}
 library(jsonlite) # Biblioteca para lidar com arquivos do formato JSON
 library(plyr) # Splitting e combinação de dados
 library(dplyr) # Manipulação de dados
@@ -164,7 +209,7 @@ library(wordcloud2) # Visualização em nuvem de palavras
 
 O arquivos importados abaixos representam os dados sobre publicações disponibilizados pela plataforma e-Lattes da UnB dos cursos citados acima.
 
-```{r eval=FALSE} 
+```{r echo=TRUE}
 publicacoes_arquitetura <- fromJSON("ArquiteturaPos/235.publication.json")
 publicacoes_design <- fromJSON("DesignPos/267.publication.json")
 ```
@@ -173,12 +218,12 @@ publicacoes_design <- fromJSON("DesignPos/267.publication.json")
 
 Foi utilizado a função `head()` para ter uma prévia das colunas e alguns registros presentes nos arquivos _json_ importados.
 
-```{r eval=FALSE}
+```{r echo=TRUE}
 head(publicacoes_arquitetura)
-head(publicacoes_design)
+# head(publicacoes_design)
 ```
 
-Com isso, foi possível observar a presença das seguintes colunas no _json_ de publicações:
+Com isso, foi possível observar a presença das seguintes colunas no _json_ de publicações. 
 
 - *natureza*: Status atual da publicação;
 - *titulo*: Título da publicação;
@@ -191,6 +236,8 @@ Com isso, foi possível observar a presença das seguintes colunas no _json_ de 
 - *paginas*: Páginas onde se encontra a publicação;
 - *autores*: Lista dos criadores da publicação;
 - *autores-endogeno*: Autores endógenos da publicação.
+
+
 
 ## 2.2.3 Contagem de registros nulos
 
