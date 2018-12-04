@@ -462,7 +462,11 @@ Interpretar Gráfico...
 
 ### 2.6.3 Nuvem de palavras
 
-Explicar...
+Para visualização dos dados gerados pelo _Bag of Words_ de Arquitetura e Design criados, uma das melhores formas para visualização é a Nuvem de Palavras (_Word Cloud_). Ela mostra de forma visual a frequência da ocorrência das palavras, onde, quanto maior o tamanho a visualização de determinada palavra na nuvem, maior sua ocorrência. [10]
+
+O _Bag of Words_ dos dois cursos contém as 2500 palavras mais frequêntes nos títulos. Por isso, uma visualização através de histogramas, neste caso, não seriam interessantes.
+
+As visualizações das nuvens de palavras dos cursos de Arquitetura e Design e sua interpretação podem ser visualizados abaixo:
 
 ```{r eval=FALSE}
 wordcloud2(term_count_bag, size=1.6, color='random-light', backgroundColor="black")
@@ -474,7 +478,22 @@ wordcloud2(term_count_bag, size=1.6, color='random-light', backgroundColor="blac
 wordcloud2(term_count2_bag, size=1.6)
 ```
 
+
 ![Departamento de Design - Nuvem de palavras chave](cloud2.png)
+
+Ao observar a Nuvem de Palavras do curso de Design, foi possível perceber que seus discentes seguem uma linha ligada aos objetivos gerais e específicos do programa. Um de seus objetivos é possibilitar o desenvolvimento tecnológico, cultural e econômico do país através de pesquisas em Design, capacitando bons pesquisadores na área.
+
+Palavras como "Ensino" (27 vezes), "Estudo" (23 vezes) e "Pesquisa" (10 vezes) evidenciam esse lado voltado para pesquisa dos objetivos do programa.
+
+Palavras como "Digital" (15 vezes) e "Digitais" (12 vezes),  "Jogos" (12), "Robô" (6) evidenciam o lado tecnológico do objetivo.
+
+Outras palavras como "Arte" (28 vezes) e "Cultural/Cultura" (11 vezes) evidenciam o lado cultural do objetivo.
+
+Essa grande variação de palavras com contextos distantes, condiz bem com o perfil dos discentes da pós graduação de Design, que, de acordo com a proposta de programa disponibilizado pela CAPES, o curso realiza pesquisas e atrai várias áreas, como Engenharia, Educação, Comunicação e Artes.
+
+# 3. Conclusão
+
+Fazer....
 
 # Referências
 
@@ -486,7 +505,10 @@ wordcloud2(term_count2_bag, size=1.6)
 6. [Afinal, o que é Data Science? - ABG Consultoria Estatística](http://www.abgconsultoria.com.br/blog/afinal-o-que-e-data-science/).
 7. [O que é a 4ª revolução industrial - e como ela deve afetar nossas vidas](http://g1.globo.com/economia/negocios/noticia/2016/10/o-que-e-a-4a-revolucao-industrial-e-como-ela-deve-afetar-nossas-vidas.html)
 8. [A sociedade do conhecimento](https://www.portaleducacao.com.br/conteudo/artigos/esporte/a-sociedade-do-conhecimento/43151)
+
 9. Formação docente e o campo educacional: políticas, regulações e
 processos. In: OLIVEIRA, Dalila Andrade; VIEIRA, Lívia Fraga (Orgs.).
 Trabalho na Educação Básica: a condição docente em sete estados brasileiros.
 Belo Horizonte: Fino Traço, 2012. p. 131-151.
+
+10. [Crie a sua própria nuvem de palavras - ONBIZ](http://onbiz.com.br/blog/2012/05/30/crie-a-sua-propria-nuvem-de-palavras/)
