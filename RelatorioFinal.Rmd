@@ -8,9 +8,10 @@ author:
 # date: "17 de Novembro de 2018"
 indent: true
 output:
+  pdf_document: default
+  always_allow_html: yes
   html_document:
     df_print: paged
-  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -189,7 +190,7 @@ Visto isso, foram realizados os passos abaixo para realizar análises relevantes
 
 Primeiramente foi importado as bibliotecas para possibilitar a leitura e manipulação dos dados.
 
-```{r eval=FALSE}
+```{r echo=TRUE}
 library(jsonlite) # Biblioteca para lidar com arquivos do formato JSON
 library(plyr) # Splitting e combinação de dados
 library(dplyr) # Manipulação de dados
@@ -197,6 +198,7 @@ library(RColorBrewer) # Editar paleta de cores dos gráficos
 library(stringr) # Facilita a manipulação de strings
 library(ggplot2) # Criação e plot de gráficos
 library(tidyr) # Manipulação de Dataframes
+library(igraph) # Criação de grafos
 Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_191') # Setando o local da instalação do Java
 library(rJava) # Java para R (dependência do qdap)
 library(qdap) # Manipulação de texto e linguagem natural
@@ -209,9 +211,21 @@ library(wordcloud2) # Visualização em nuvem de palavras
 
 O arquivos importados abaixos representam os dados sobre publicações disponibilizados pela plataforma e-Lattes da UnB dos cursos citados acima.
 
-```{r eval=FALSE}
+```{r echo=TRUE}
+# Imoportando dados de Arquitetura
+advise_arquitetura <- fromJSON("ArquiteturaPos/235.advise.json")
+graph_arquitetura <- fromJSON("ArquiteturaPos/235.graph.json")
+list_arquitetura <- fromJSON("ArquiteturaPos/235.list.json")
+perfil_arquitetura <- fromJSON("ArquiteturaPos/235.profile.json")
 publicacoes_arquitetura <- fromJSON("ArquiteturaPos/235.publication.json")
+
+# Importando dados de Design
+advise_design <- fromJSON("DesignPos/267.advise.json")
+graph_design <- fromJSON("DesignPos/267.graph.json")
+list_design <- fromJSON("DesignPos/267.list.json")
+perfil_design <- fromJSON("DesignPos/267.profile.json")
 publicacoes_design <- fromJSON("DesignPos/267.publication.json")
+
 ```
 
 ## 2.2.3 Descrição dos Dados
@@ -260,7 +274,7 @@ Esta fase abrange todas as atividades para construir o conjunto final de dados, 
 
 Para a obtenção de melhores recursos para manipulação dos dados, foi transformado todos os dados em _dataframes_. Nota-se a presença de novas colunas referentes aos periódicos que foram obtidas através dos comandos baixo:
 
-```{r eval=FALSE} 
+```{r echo=TRUE}
 # Arquitetura
 df_pub_arquitetura <- sapply(publicacoes_arquitetura, ldply, data.frame) %>% bind_rows() %>% as_tibble()
 tbl_arq_publ <- tbl_df(df_pub_arquitetura)
@@ -288,7 +302,7 @@ No atual _dataset_, cada registro de publicação possui um _array_ de autores q
 
 Então, para contornar este problema, foi utilizado os comandos abaixo para comparar a lista de autores e autores endogenos e analisar o que é distinto entre eles. Por fim foi criado mais uma coluna com os autores reais de cada publicação.
 
-```{r eval=FALSE} 
+```{r echo=TRUE}
 # Arquitetura
 pub_arquitetura_autores.endo <- df_pub_arquitetura %>% unnest(autores.endogeno) %>% distinct()
 
@@ -300,7 +314,7 @@ pub_design_autores.endo <- df_pub_design %>% unnest(autores.endogeno) %>% distin
 
 Nesta etapa foi separado os periódicos por cada autor, deixando as informações prontas para serem projetadas em um gráfico para realizarmos a análise.
 
-```{r eval=FALSE}
+```{r echo=TRUE}
 # Arquitetura
 pub_arquitetura_periodicos <- pub_arquitetura_autores.endo %>% filter(is.element(pub_arquitetura_autores.endo$periodico, pub_arquitetura_autores.endo$ano))
 
@@ -312,7 +326,7 @@ pub_design_periodicos <- pub_design_autores.endo %>% filter(is.element(pub_desig
 
 Foi feita também uma manipulação de dados para separar as publicações por país, de modo que também ficasse pronto para uma projeção no `ggplot2`.
 
-```{r eval=FALSE}
+```{r echo=TRUE}
 # Arquitetura
 pub_arquitetura_group <- select(pub_arquitetura_periodicos, c("periodico", "pais_de_publicacao"))
 arquitetura_qtde_pub_pais <- pub_arquitetura_group %>% add_count(pais_de_publicacao)
@@ -336,7 +350,7 @@ Foi escolhido o _bag of words_ como modelo de mineração de texto. A ideia é e
 
 Como dito anteriormente, o _Bag of Words_ foi o modelo de mineração de texto escolhido para o relatório, que é muito utilizado em algoritmos de processamento de linguagem natural e análise de sentimentos. Seu objetivo é fazer uma representação das palavras mais recorrentes em um texto, desconsiderando alguns fatores como a ordem em que as palavras se encontram e a gramática. No fim o _Bag of Words_ tem o _tracking_ da quantidade dessas palavras, e podemos tirar conclusões sobre o resultado apresentado.
 
-```{r eval=FALSE}
+```{r echo=TRUE}
 # Arquitetura
 titulos <- paste(tbl_arq_publ$titulo, collapse = ' ')
 titulos <- removeWords(titulos, c(stopwords('pt'), stopwords('en')))
@@ -356,21 +370,18 @@ foram utilizadas listas de palavras de parada nestes dois idiomas. Por fim esse 
 
 Após isso, com os dados tratados, a contagem de termos foi feita, onde foi passado como parâmetro o número 25 que diz o número de palavras mais constantes, em ordem decrescente de aparições, para observação inicial da contagem.
 
-```{r eval=FALSE}
+```{r echo=TRUE}
 plot(term_count)
 ```
 
-![Departamento de Arquitetura - Contagem de palavras chave](term-count.png)
-
-```{r eval=FALSE}
+```{r echo=TRUE}
 plot(term_count2)
 ```
 
-![Departamento de Design - Contagem de palavras chave](term-count2.png)
 
 Foi observado que o uso das palavras de parada de cada idioma não foi tão eficaz quanto esperado, onde algumas palavras passaram pelo filtro criado. Para contornar este problema, foi feita outra modificação nos dados, onde foram retiradas as palavras que tinham 3 caracteres ou menos, para se obter um melhor resultado.
 
-```{r eval=FALSE}
+```{r echo=TRUE}
 # Arquitetura
 term_count <- term_count[!(nchar(term_count$WORD) <= 3),]
 
@@ -380,24 +391,21 @@ term_count2 <- term_count2[!(nchar(term_count2$WORD) <= 3),]
 
 Com isso, foi possível plotar o gráfico com a nova contagem de palavras e ver os resultados.
 
-```{r eval=FALSE}
+```{r echo=TRUE}
 plot(term_count)
 ```
 
-![Departamento de Arquitetura - Nova contagem de palavras chave](2term-count.png)
-
-```{r eval=FALSE}
+```{r echo=TRUE}
 plot(term_count2)
 ```
 
-![Departamento de Arquitetura - Nova contagem de palavras chave](2term-count2.png)
 
 Após essa manipulação foi possível observar que o modelo com a contagem de palavras chave foi mais eficaz em busca do seu objetivo, pois as palavras irrelevantes foram retiradas.
 
 Com os dados normalizados, foi possível criar um _Bag of Words_ mais robusto para posteriormente criarmos uma visualização em nuvem, onde as palavras mais presentes tem tamanho maior na nuvem.
 
 
-```{r eval=FALSE}
+```{r echo=TRUE}
 # Arquitetura
 titulos_bag <- paste(tbl_arq_publ$titulo, collapse = ' ')
 titulos_bag <- removeWords(titulos, c(stopwords('pt'), stopwords('en')))
@@ -424,29 +432,117 @@ Com todas as etapas tendo sido percorridas, mesmo não sendo o fim do processo -
 
 ### 2.6.1 Publicações por Ano
 
+Para cada programa disposto para a realização do trabalho, é possível realizar uma contagem de publicações por ano. Dentro da avaliação quadrienal dos programas, um ponto muito importante e que conta para a nota total do programa (40%) é referente à Produção Intelectual realizada no período de avaliação. Não somente a quantidade das produções mas também a qualidade das mesmas são levadas em consideração na hora da avaliação e pontuação dos programas.
 
+#### Arquitetura
 
-```{r eval=FALSE}
+Para o programa de Arquitetura e Urbanismo foram aplicados alguns procedimentos para extrair informações relevantes sobre as publicações.
+
+##### Quantidade total de publicações
+
+```{r eval=TRUE}
+length(pub_arquitetura_periodicos$.id)
+```
+
+##### Quantidade de publicações que possuem alguma natureza descrita
+```{r eval=TRUE}
+pub_arquitetura_periodicos %>% group_by(complete.cases(natureza)) %>%
+  dplyr::summarize(Quantidade=n())
+```
+
+Pode-se observar que os valores onde o natureza = TRUE foram os que possuem alguma natureza, ou seja, 992 das 1178. Os outros 186 são publicações as quais a natureza não foram informadas.
+
+Desses 186, podemos observar os tipos de publicações:
+
+```{r eval=TRUE}
+pub_arquitetura_periodicos %>% filter(!complete.cases(natureza)) %>% distinct(tipo)
+```
+
+Para os tipos de natureza da publicação, as que aparecem mais vezes - apenas as 10 primeiras - foram:
+
+```{r echo=TRUE}
+pub_grouped_by_length <- pub_arquitetura_periodicos %>% 
+  filter(complete.cases(natureza)) %>%
+  group_by(natureza) %>%
+  dplyr::summarize(Quantidade=n()) %>%
+  arrange(Quantidade) %>% top_n(10)
+
+ggplot(data=pub_grouped_by_length, aes(x=natureza, y=Quantidade)) +
+  geom_bar( mapping = aes(x=natureza),  stat = "identity") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+Com os dados e o acesso ao ano referente à cada publicação, podemos visualizar também a quantidade de publicações por ano.
+
+```{r echo=TRUE}
 # Arquitetura
-ggplot(pub_arquitetura_periodicos, aes(x = .id )) +
+periodicos_por_ano <- pub_arquitetura_periodicos %>% group_by(.id) %>% dplyr::summarize(Quantidade=n())
+ggplot(periodicos_por_ano, aes(x = .id, y=Quantidade, group = 1 )) +
 ggtitle("Qtde de Publicações por Ano - Pós Graduação Arquitetura") +
 labs(y = "Total de Publicações", x = "Ano") +
-geom_histogram(stat ="count" ,fill = "#1123A4")
+geom_line(linetype = "dashed") +
+geom_point()
+
+mean(periodicos_por_ano$Quantidade)
 ```
 
-![Departamento de Arquitetura - Publicações anuais](publicacoes-arquitetura.png)
+Neste gráfico podemos ver o que aconteceu com a quantidade de publicações por ano para o programa de Arquitetura: desde a primeira avaliação do programa, do ano de 2010 até o ano de 2017, a quantidade de publicações por ano caiu de 168 (2010) para 137 (2017), a qual terminou com um valor cerca de 7% abaixo da média dos 8 anos (147.25 publicações em média).
 
-```{r eval=FALSE}
+
+#### Design
+
+O mesmo aplicado para o programa de Arquitetura pode ser aplicado para o programa de Design.
+
+##### Quantidade total de publicações
+
+```{r eval=TRUE}
+length(pub_design_periodicos$.id)
+```
+
+##### Quantidade de publicações que possuem alguma natureza descrita
+```{r eval=TRUE}
+pub_design_periodicos%>% group_by(complete.cases(natureza)) %>%
+  dplyr::summarize(Quantidade=n())
+```
+
+Pode-se observar que os valores onde o natureza = TRUE foram os que possuem alguma natureza, ou seja, 349 das 422. Os outros 73 são publicações as quais a natureza não foram informadas.
+
+Desses 73, podemos observar os tipos de publicações:
+
+```{r eval=TRUE}
+pub_design_periodicos %>% filter(!complete.cases(natureza)) %>% distinct(tipo)
+```
+
+Para os tipos de natureza da publicação, as que aparecem mais vezes - apenas as 10 primeiras - foram:
+
+```{r echo=TRUE}
+pub_design_grouped_by_length <- pub_design_periodicos %>% 
+  filter(complete.cases(natureza)) %>%
+  group_by(natureza) %>%
+  dplyr::summarize(Quantidade=n()) %>%
+  arrange(Quantidade) %>% top_n(10)
+
+ggplot(data=pub_design_grouped_by_length , aes(x=natureza, y=Quantidade)) +
+  geom_bar( mapping = aes(x=natureza),  stat = "identity") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+Com os dados e o acesso ao ano referente à cada publicação, podemos visualizar também a quantidade de publicações por ano.
+
+
+```{r echo=TRUE}
 # Design
-ggplot(pub_design_periodicos, aes(x = .id )) +
+periodicos_por_ano_design <- pub_design_periodicos %>% group_by(.id) %>% dplyr::summarize(Quantidade=n())
+ggplot(periodicos_por_ano_design , aes(x = .id, y=Quantidade, group = 1 )) +
 ggtitle("Qtde de Publicações por Ano - Pós Graduação Design") +
 labs(y = "Total de Publicações", x = "Ano") +
-geom_histogram(stat ="count" ,fill = "#11BAA4")
+geom_line(color="red", linetype = "dashed") +
+geom_point()
+
+mean(periodicos_por_ano_design$Quantidade)
 ```
 
-![Departamento de Arquitetura - Publicações anuais](publicacoes-design.png)
+Já em relação ao programa de Arquitetura e Urbanismo, o programa de Design teve uma melhora significativa no que se diz respeito à quantidade de publicações. Do ano de 2010 e 2017, a evolução nas publicações foi de 30 publicações, e no ano de 2017 a quantidade ultrapassou a média de 52.75 publicações anuais em aproximadamente 6%.
 
-Explicar...
 
 ### 2.6.2 Publicações por País
 
@@ -461,7 +557,7 @@ Para visualização destes dados, foi escolhido o gráfico de pizza, que é um d
 
 Foi plotado o gráfico de pizza das publicações por país do programa. Devido o programa de Arquitetura ter vários países com publicações vinculadas, foi criada uma paleta de cor para este gráfico. Além disso foi mostrado a quantidade de cada publicação por país.
 
-```{r eval=FALSE}
+```{r echo=TRUE}
 cols <- colorRampPalette(brewer.pal(12, "Set2"))
 myPal <- cols(length(unique(arquitetura_qtde_pub_pais_distinct$pais_de_publicacao)))
 
@@ -485,8 +581,6 @@ scale_fill_manual(values = myPal)
 head(arquitetura_qtde_pub_pais_distinct, n = 14L)
 
 ```
-![Departamento de Arquitetura - Proporção de Publicações por País](publicacoes-pais-arquitetura-grafico.png)
-![Departamento de Arquitetura - Número de Publicações por País](publicacoes-pais-arquitetura-tabela.png)
 
 De acordo com o gráfico, nota-se que ainda há uma grande prevalência de publicações em português, o que já era um resultado esperado.
 
@@ -498,7 +592,7 @@ Um dos objetivos descritos nas Propostas do Programa de Arquitetura é ampliar a
 
 Em seguida foi plotado o gráfico de pizza das publicações por país do programa de Design e um quadro com seus dados.
 
-```{r eval=FALSE}
+```{r echo=TRUE}
 design_qtde_pub_pais_distinct <- design_qtde_pub_pais_distinct[-c(6), ]
 
 ggplot(design_qtde_pub_pais_distinct, aes(x= "", y= n, fill = design_qtde_pub_pais_distinct$pais_de_publicacao)) +
@@ -519,10 +613,6 @@ head(design_qtde_pub_pais_distinct, n = 6L)
 
 ```
 
-
-![Departamento de Design - Proporção de Publicações por País](publicacoes-pais-design-grafico.png)
-![Departamento de Design - Número de Publicações por País](publicacoes-pais-design-tabela.png)
-
 Um ponto forte do programa é sua perspectiva de internacionalização constante, independente de indicadores (poucas publicações). Isso ocorre pelo fato do curso ser novo, mas é importante ressaltar os diversos eventos acadêmicos realizados pelo programa sozinho e/ou em associação de outros órgãos/sociedades durante os quatro primeiros anos de sua existência, principalmente o I Seminário Internacional de Pesquisa em Design (2017) que trouxe convidados nacionais de renomadas universidades do país e palestrantes internacionais.
 
 É interessante destacar a parceria com o Programa de Pós-Graduação de Arte da UnB, que desde o início tem dado bons frutos ampliando o contato no sentido de internacionalização com projetos vinculados a mais de 5 países, como mostra o gráfico.
@@ -538,10 +628,9 @@ O _Bag of Words_ dos dois cursos contém as 2500 palavras mais frequêntes nos t
 
 As visualizações das nuvens de palavras dos cursos de Arquitetura e Design e sua interpretação podem ser visualizados abaixo:
 
-```{r eval=FALSE}
+```{r eval=FALSE, include=FALSE}
 wordcloud2(term_count_bag, size=1.6, color='random-light', backgroundColor="black")
 ```
-
 ![Departamento de Arquitetura - Nuvem de palavras chave](cloud1.png)
 
 Com a Nuvem de Palavras do curso de Arquitetura e Urbanismo é possível notar que o programa tem buscado capacitar através de publicação envolvendo recursos humanos, políticas públicas e desenvolvimento das cidades. Além disso, com a criação do  “Mestrado em Desenho Urbano”, também é perceptível o enfoque nos estudos da configuração físico-espacial, acentuando a ênfase nos estudos de urbanismo e das questões correlatas à cidade, consolidando-se como um pólo nas áreas de Planejamento e Desenho Urbano. Todas estas áreas fazem parte da Proposta de Programa do curso, obtido através da Plataforma Sucupira.
@@ -553,12 +642,12 @@ Palavras como “Cidade” (90 vezes), “Análise” (92 vezes), “Urbana” (
 Palavras como “Espacial” (25 vezes), “Cidade” (90 vezes), “Social” (28 vezes), “Distrito” (34 vezes), “Distric” (9 vezes) e “Public” (15 vezes) evidenciam a ênfase da configuração físico-espacial.
 
 
-```{r eval=FALSE}
+```{r eval=FALSE, include=FALSE}
 wordcloud2(term_count2_bag, size=1.6)
 ```
 
-
 ![Departamento de Design - Nuvem de palavras chave](cloud2.png)
+
 
 Ao observar a Nuvem de Palavras do curso de Design, foi possível perceber que seus discentes seguem uma linha ligada aos objetivos gerais e específicos do programa. Um de seus objetivos é possibilitar o desenvolvimento tecnológico, cultural e econômico do país através de pesquisas em Design, capacitando bons pesquisadores na área.
 
@@ -570,9 +659,106 @@ Outras palavras como "Arte" (28 vezes) e "Cultural/Cultura" (11 vezes) evidencia
 
 Essa grande variação de palavras com contextos distantes, condiz bem com o perfil dos discentes da pós graduação de Design, que, de acordo com a proposta de programa disponibilizado pela CAPES, o curso realiza pesquisas e atrai várias áreas, como Engenharia, Educação, Comunicação e Artes.
 
+### 2.6.4 Análise de perfil e relacionamento de docentes
+
+Um outro modelo de análise de dados é realizar, à partir do arquivo `graph.json` criar uma espécie de "rede de relacionamentos" entre os autores das diversas publicações dos dois programas dispostos. Isso é possível utilizando a biblioteca `igraph` e permite visualizar, de maneira gráfica por meio de um grafo, qual docente publica juntamente com outros docentes, como se da essa relação, etc.
+
+
+#### Arquitetura
+
+Para o programa de arquitetura temos os seguintes dados:
+
+```{r graph arquitetura, echo=TRUE}
+# Quantidade de docentes
+length(perfil_arquitetura)
+
+# Diferentes áreas de atuação de grande área
+unique(unlist(sapply(
+  sapply(
+    perfil_arquitetura, function(x) x$areas_de_atuacao$grande_area
+  ), function(x) x)
+))
+# Diferentes áreas de atuação de área
+unique(unlist(sapply(
+  sapply(
+    perfil_arquitetura, function(x) x$areas_de_atuacao$area
+  ), function(x) x)
+))
+```
+
+Os docentes se concentram em 5 grandes áreas que se dividem em outras 15 áreas.
+
+Para a relação de publicação desses professores, ou seja, qual professor publica com qual temos:
+
+
+```{r Graph-design, echo=TRUE}
+
+nodes <- graph_arquitetura$nodes
+nodes$name <- nodes$properties$name
+nodes$properties <- NULL
+nodes
+
+relations <- graph_arquitetura$links
+
+g <- graph_from_data_frame(relations, directed=TRUE, vertices=nodes)
+plot(g)
+```
+
+Onde podemos observer que a docente Liza Maria Souza de Andrade é o que mais aparece em publicações relacionado com outros docentes.
+
+
+#### Design
+
+Para o programa de design temos os seguintes dados:
+
+```{r graph design, echo=TRUE}
+# Quantidade de docentes
+length(perfil_design)
+
+# Diferentes áreas de atuação de grande área
+unique(unlist(sapply(
+  sapply(
+    perfil_design, function(x) x$areas_de_atuacao$grande_area
+  ), function(x) x)
+))
+# Diferentes áreas de atuação de área
+unique(unlist(sapply(
+  sapply(
+    perfil_design, function(x) x$areas_de_atuacao$area
+  ), function(x) x)
+))
+```
+
+Os docentes se concentram em 6 grandes áreas que se dividem em outras 11 áreas.
+
+Para a relação de publicação desses professores, ou seja, qual professor publica com qual temos:
+
+```{r Graph, echo=TRUE}
+
+nodes <- graph_design$nodes
+nodes$name <- nodes$properties$name
+nodes$properties <- NULL
+nodes
+
+relations <- graph_design$links
+
+g <- graph_from_data_frame(relations, directed=TRUE, vertices=nodes)
+plot(g)
+```
+
+
+Onde podemos observer que o docente Rogerio José Camara é o que mais aparece em publicações relacionado com outros docentes.
+
 # 3. Conclusão
 
-Fazer....
+Os programas de pós graduação de Arquitetura e Urbanismo e Design da Universidade de Brasília (UnB) contém grandes fontes de dados e é uma rica fonte de informações para análise, mas como qualquer outro Big Data, seu estudo necessita ser aprofundado. Para isso, a Ciência de Dados é o recurso do conhecimento capaz de trazer informações relevantes dessas grandes massas de dados, e assim fornecer um meio para tomadas de decisão e predições.
+
+Para trabalhar de forma correta e produtiva com Big Data, é recomendado a implementação de metodologias de mineração de dados, e o CRISP-DM é uma boa alternativa, pois tem um processo bem desenhado e atividades bem definidas para tal.
+
+Em relação aos programas, nota-se que eles estão em constante crescimento, seja em número de docentes, discentes ou publicações, e os cursos de Arquitetura e Design não são diferentes.
+Conclui-se que programa de Arquitetura, através das análises dos dados, tem buscado ao longo dos anos cumprir os objetivos gerais e específicos da Proposta do Programa e tem obtido êxito. O programa da UnB tem um âmbito global com docentes e várias publicação internacionais, em 13 países diferentes. O conteúdo de suas publicações remetem fielmente aos assuntos citados no Histórico e Contextualização do Programa, envolvendo sustentabilidade, desenvolvimento de cidades e outros assuntos como urbanismo, contrução e espaço.
+
+Conclui-se também que o programa de Design, apesar de não ser bem pontuado pela avaliação quadrienal, tem objetivos bem definidos e busca alcança-los. Seus objetivos gerais e específicos incluem capacitar pesquisadores na área de Design tendo foco em auxiliar o crescimento do país tecnologia, cultura e economia, e seus estudos e publicações seguem fielmente essa linha de pensamento. Apesar de ser um programa recente, a Pós-Graduação em Design da UnB tem grande potencial para virar referencia tanto nacionalmente, quanto internaciolnamente, visto que suas publicações fora do Brasil tem crescido regularmente.
 
 # Referências
 
