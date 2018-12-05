@@ -416,7 +416,7 @@ term_count2_bag <- term_count2_bag[!(nchar(term_count2_bag$WORD) <= 3),]
 
 Com o modelo em mãos é possível realizar a avaliação dos seus resultados de maneira detalhada e revisar as etapas executadas para que os mesmo estejam dentro dos previstos e cumpram os requisitos identificados na fase de entendimento do negócio. [6]
 
-*Fazer...*
+De forma geral, os objetivos traçados na Compreensão de Negócios que envolvia extrair informações relevantes sobre as publicações e sobre seus autores foi alcançado. Foi possível obter várias informações interessantes, onde a aplicação prática da mineração de texto e manipulação de dados será explicada no próximo tópico.
 
 ## 2.6 Desenvolvimento
 
@@ -527,7 +527,7 @@ Um ponto forte do programa é sua perspectiva de internacionalização constante
 
 É interessante destacar a parceria com o Programa de Pós-Graduação de Arte da UnB, que desde o início tem dado bons frutos ampliando o contato no sentido de internacionalização com projetos vinculados a mais de 5 países, como mostra o gráfico.
 
-As atividades do programa em relação à internacionalização são eficientes, pois 3 professoras têm Pós-doutorado concluídos com bolsa de pesquisa integral e internacionais, mesmo com pouco tempo de existência.
+As atividades do programa em relação à internacionalização são eficientes, pois 3 professoras têm Pós-doutorado concluídos com bolsa de pesquisa integral e internacionais, mesmo com pouco tempo de existência. Com isso são esperadas novas publicações internacionais em breve.
 
 
 ### 2.6.3 Nuvem de palavras
