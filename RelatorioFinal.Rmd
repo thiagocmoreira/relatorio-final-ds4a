@@ -189,7 +189,7 @@ Visto isso, foram realizados os passos abaixo para realizar análises relevantes
 
 Primeiramente foi importado as bibliotecas para possibilitar a leitura e manipulação dos dados.
 
-```{r echo=TRUE}
+```{r eval=FALSE}
 library(jsonlite) # Biblioteca para lidar com arquivos do formato JSON
 library(plyr) # Splitting e combinação de dados
 library(dplyr) # Manipulação de dados
@@ -209,7 +209,7 @@ library(wordcloud2) # Visualização em nuvem de palavras
 
 O arquivos importados abaixos representam os dados sobre publicações disponibilizados pela plataforma e-Lattes da UnB dos cursos citados acima.
 
-```{r echo=TRUE}
+```{r eval=FALSE}
 publicacoes_arquitetura <- fromJSON("ArquiteturaPos/235.publication.json")
 publicacoes_design <- fromJSON("DesignPos/267.publication.json")
 ```
@@ -218,9 +218,9 @@ publicacoes_design <- fromJSON("DesignPos/267.publication.json")
 
 Foi utilizado a função `head()` para ter uma prévia das colunas e alguns registros presentes nos arquivos _json_ importados.
 
-```{r echo=TRUE}
+```{r eval=FALSE}
 head(publicacoes_arquitetura)
-# head(publicacoes_design)
+head(publicacoes_design)
 ```
 
 Com isso, foi possível observar a presença das seguintes colunas no _json_ de publicações. 
@@ -424,7 +424,7 @@ Com todas as etapas tendo sido percorridas, mesmo não sendo o fim do processo -
 
 ### 2.6.1 Publicações por Ano
 
-Descrever...
+
 
 ```{r eval=FALSE}
 # Arquitetura
@@ -450,11 +450,22 @@ Explicar...
 
 ### 2.6.2 Publicações por País
 
-Explicar...
+É um objetivo generalizado entre os programas de pós graduação internacionalizar suas publicações e ter maior relevância em um âmbito global.
+
+Para mostrar indícios desta internacionalização, foram feitas análises da proporção de publicações por país, mostrando que os cursos de Arquitetura e Design ao longos dos anos vêm cumprido, mesmo que aos poucos, estes objetivos de globalização.
+
+Para visualização destes dados, foi escolhido o gráfico de pizza, que é um diagrama circular que mostra proporcionalmente os valores de acordo com suas frequências. No gráfico de pizza os ângulos representam o percentual de cada valor específico, em vista do valor total. [11]
+
+
+#### 2.6.2.1 Publicações por País - Arquitetura e Urbanismo
+
+Foi plotado o gráfico de pizza das publicações por país do programa. Devido o programa de Arquitetura ter vários países com publicações vinculadas, foi criada uma paleta de cor para este gráfico. Além disso foi mostrado a quantidade de cada publicação por país.
 
 ```{r eval=FALSE}
 cols <- colorRampPalette(brewer.pal(12, "Set2"))
 myPal <- cols(length(unique(arquitetura_qtde_pub_pais_distinct$pais_de_publicacao)))
+
+arquitetura_qtde_pub_pais_distinct <- arquitetura_qtde_pub_pais_distinct[-c(10), ]
 
 ggplot(arquitetura_qtde_pub_pais_distinct, aes(x= "", y= n, fill = arquitetura_qtde_pub_pais_distinct$pais_de_publicacao)) +
 ggtitle("Qtde de Publicações por País - Pós Graduação Arquitetura") +
@@ -469,7 +480,7 @@ theme (
   axis.ticks = element_blank()
 ) +
 # geom_text(aes(y = n/2 + c(0, cumsum(n)[-length(n)]), label = percent(n/100)), data = arquitetura_qtde_pub_pais_distinct, size=2) +
-scale_fill_manual(values = myPal, na.value = "#FF8D59")
+scale_fill_manual(values = myPal)
 
 head(arquitetura_qtde_pub_pais_distinct, n = 14L)
 
@@ -477,12 +488,19 @@ head(arquitetura_qtde_pub_pais_distinct, n = 14L)
 ![Departamento de Arquitetura - Proporção de Publicações por País](publicacoes-pais-arquitetura-grafico.png)
 ![Departamento de Arquitetura - Número de Publicações por País](publicacoes-pais-arquitetura-tabela.png)
 
-Interpretar Gráfico...
+De acordo com o gráfico, nota-se que ainda há uma grande prevalência de publicações em português, o que já era um resultado esperado.
 
-Explicar...
+Um ponto a se destacar é a presença de publicações em mais de 13 países; o que pode ser reflexo da atuação internacional dos Grupos de Pesquisa do programa de Arquitetura na organização de congressos e seminários internacionais, que resultam em publicações  em outros países.
+
+Um dos objetivos descritos nas Propostas do Programa de Arquitetura é ampliar a rede de cooperação internacional e intercâmbio de alunos e pesquisadores. O programa PPG-FAU, que tem participação de discentes tanto brasileiros quanto estrangeiros, tem resultado em publicações conjuntas entre alunos brasileiros e estrangeiros, além dos professores. Este programa é outro fator que reflete no gráfico das publicações, onde pouco mais de 17% tem participação estrangeira.
+
+#### 2.6.2.2 Publicações por País - Design
+
+Em seguida foi plotado o gráfico de pizza das publicações por país do programa de Design e um quadro com seus dados.
 
 ```{r eval=FALSE}
-wordcloud2(term_count, color = "random-light", minRotation = -pi/6, maxRotation = -pi/6, minSize = 10, rotateRatio = 1)
+design_qtde_pub_pais_distinct <- design_qtde_pub_pais_distinct[-c(6), ]
+
 ggplot(design_qtde_pub_pais_distinct, aes(x= "", y= n, fill = design_qtde_pub_pais_distinct$pais_de_publicacao)) +
 ggtitle("Qtde de Publicações por País - Pós Graduação Design") +
 geom_bar(width = 1, stat ="identity") +
@@ -505,7 +523,12 @@ head(design_qtde_pub_pais_distinct, n = 6L)
 ![Departamento de Design - Proporção de Publicações por País](publicacoes-pais-design-grafico.png)
 ![Departamento de Design - Número de Publicações por País](publicacoes-pais-design-tabela.png)
 
-Interpretar Gráfico...
+Um ponto forte do programa é sua perspectiva de internacionalização constante, independente de indicadores (poucas publicações). Isso ocorre pelo fato do curso ser novo, mas é importante ressaltar os diversos eventos acadêmicos realizados pelo programa sozinho e/ou em associação de outros órgãos/sociedades durante os quatro primeiros anos de sua existência, principalmente o I Seminário Internacional de Pesquisa em Design (2017) que trouxe convidados nacionais de renomadas universidades do país e palestrantes internacionais.
+
+É interessante destacar a parceria com o Programa de Pós-Graduação de Arte da UnB, que desde o início tem dado bons frutos ampliando o contato no sentido de internacionalização com projetos vinculados a mais de 5 países, como mostra o gráfico.
+
+As atividades do programa em relação à internacionalização são eficientes, pois 3 professoras têm Pós-doutorado concluídos com bolsa de pesquisa integral e internacionais, mesmo com pouco tempo de existência.
+
 
 ### 2.6.3 Nuvem de palavras
 
@@ -520,6 +543,15 @@ wordcloud2(term_count_bag, size=1.6, color='random-light', backgroundColor="blac
 ```
 
 ![Departamento de Arquitetura - Nuvem de palavras chave](cloud1.png)
+
+Com a Nuvem de Palavras do curso de Arquitetura e Urbanismo é possível notar que o programa tem buscado capacitar através de publicação envolvendo recursos humanos, políticas públicas e desenvolvimento das cidades. Além disso, com a criação do  “Mestrado em Desenho Urbano”, também é perceptível o enfoque nos estudos da configuração físico-espacial, acentuando a ênfase nos estudos de urbanismo e das questões correlatas à cidade, consolidando-se como um pólo nas áreas de Planejamento e Desenho Urbano. Todas estas áreas fazem parte da Proposta de Programa do curso, obtido através da Plataforma Sucupira.
+
+Também é importante destacar a linha de Sustentabilidade aplicada à Arquitetura do programa, justificada pela relevância das palavras “Eficiência” (19 vezes), “Água” (19 vezes) e “Natural” (19 vezes).
+
+Palavras como “Cidade” (90 vezes), “Análise” (92 vezes), “Urbana” (60 vezes) e “Urban” (56 vezes) evidenciam o lado voltado para o desenvolvimento das cidades. 
+
+Palavras como “Espacial” (25 vezes), “Cidade” (90 vezes), “Social” (28 vezes), “Distrito” (34 vezes), “Distric” (9 vezes) e “Public” (15 vezes) evidenciam a ênfase da configuração físico-espacial.
+
 
 ```{r eval=FALSE}
 wordcloud2(term_count2_bag, size=1.6)
@@ -559,3 +591,5 @@ Trabalho na Educação Básica: a condição docente em sete estados brasileiros
 Belo Horizonte: Fino Traço, 2012. p. 131-151.
 
 10. [Crie a sua própria nuvem de palavras - ONBIZ](http://onbiz.com.br/blog/2012/05/30/crie-a-sua-propria-nuvem-de-palavras/)
+
+11. [Gráfico de pizza - Portal Action](http://www.portalaction.com.br/estatistica-basica/18-grafico-de-pizza)
